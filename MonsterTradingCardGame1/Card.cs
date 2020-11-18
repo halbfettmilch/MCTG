@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    abstract class Card
+   public abstract class Card
     {
         public string _Name { get; protected set;}
         public string _Description { get; protected set; }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    class OrkBoys : Card
+    public class OrkBoys : Card
     {
 
 

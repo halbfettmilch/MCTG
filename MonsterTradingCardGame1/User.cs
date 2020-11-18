@@ -9,7 +9,7 @@ namespace MonsterTradingCardGame1
     {
         public string _Username { get; protected set; }
         public string _Password { get; protected set; }
-        public string _Email { get; protected set; }
+       
 
         public int _Coins { get; protected set; }
 
@@ -21,11 +21,11 @@ namespace MonsterTradingCardGame1
 
 
 
-        public User(string username, string password, string email)
+        public User(string username, string password)
         {
             this._Username = username;
             this._Password = password;
-            this._Email = email;
+           
             this._Coins = 20;
             
         }

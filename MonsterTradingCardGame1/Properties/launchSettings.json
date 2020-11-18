@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "MonsterTradingCardGame1": {
+      "commandName": "Project"
+    },
+    "Tests": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\Andre\\source\\repos\\MonsterTradingCardGame1\\MonsterTradingTesting"
+    }
+  }
+}

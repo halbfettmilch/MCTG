@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    class ElderKraken : Card
+    public class ElderKraken : Card
     {
 
 
@@ -27,6 +28,8 @@ namespace MonsterTradingCardGame1
             {
                 CombatDMG = 0;
             }
+
+            
 
             return CombatDMG;
         }
