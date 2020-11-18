@@ -1,7 +1,7 @@
 ﻿using System;
 
 using System.IO;
-
+using Newtonsoft.Json;
 
 
 namespace MonsterTradingCardGame1
@@ -29,25 +29,25 @@ namespace MonsterTradingCardGame1
                 switch (arr[1])
                 {
                     case "users":
+                        User userbuffer = JsonConvert.DeserializeObject<User>(request.json);
                         switch (request.http_verb)
                     {
                             case "GET":
-                                manager.getUser(request.payload[0]["Username"]);
+                               manager.getUser(userbuffer.Username);
                                 break;
                             case "POST":
-
-                                break;
-                            case "PUT":
+                                manager.setUser(userbuffer.Username,userbuffer.Password);
 
                                 break;
                             case "DELETE":
+                                manager.deleteUser(userbuffer.Username);
 
                                 break;
+                               
                             default:
                                 Console.WriteLine("ERROR");
                                 break;
-
-                        }
+                    }
                         break;
                     case "sessions ":
                         break;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-
+using Newtonsoft.Json;
 
 
 namespace MonsterTradingCardGame1
@@ -43,18 +43,33 @@ namespace MonsterTradingCardGame1
 
                 } while (message != "");
                 request.data = buffer;
-                message = "";
+                string json = "";
 
                 while (reader.Peek() != -1)
                 {
                     
-                    message += (char)reader.Read();
+                    json += (char)reader.Read();
 
 
                 }
                 debug($"received: " + message);
-                arr = message.Split(",");
-                int i = 0;
+
+              /*
+                SortedDictionary<string, string> bufferdic = JsonConvert.DeserializeObject<SortedDictionary<string, string>>(json);
+               request.payload.Add(bufferdic);
+               Console.WriteLine(bufferdic["Username"]);
+               
+               // arr = json.Split("|");
+                //for (int i = 0; i < arr.Length; i++)
+               // {
+               //     SortedDictionary<string, string> bufferdic = JsonConvert.DeserializeObject<SortedDictionary<string, string>>(arr[i]);
+               //     request.payload.Add(bufferdic);
+               //     Console.WriteLine(bufferdic["Username"]);
+                //
+               // }
+
+
+                /*
                 while (i<arr.Length)
                 {
                    
@@ -66,6 +81,7 @@ namespace MonsterTradingCardGame1
                     i++;
                     debug(bufferarr[0]+ " " + bufferarr[1]);
                 }
+                */
 
             }
             catch (Exception exc)

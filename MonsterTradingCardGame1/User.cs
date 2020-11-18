@@ -7,11 +7,11 @@ namespace MonsterTradingCardGame1
 
     public class User
     {
-        public string _Username { get;  set; }
-        public string _Password { get;  set; }
+        public string Username { get;  set; }
+        public string Password { get;  set; }
        
 
-        public int _Coins { get;  set; }
+        public int Coins { get;  set; }
 
 
         public List<Card> stack = new List<Card>();
@@ -23,10 +23,10 @@ namespace MonsterTradingCardGame1
 
         public User(string username, string password)
         {
-            this._Username = username;
-            this._Password = password;
+            this.Username = username;
+            this.Password = password;
            
-            this._Coins = 20;
+            this.Coins = 20;
             
         }
 
