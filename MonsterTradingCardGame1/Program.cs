@@ -1,42 +1,64 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+
+
 
 namespace MonsterTradingCardGame1
-{   
+{
     class Program
     {
-        User CreateUser()
+        static GameManager myDB = new GameManager();
+        static async Task Main(string[] args)
         {
-            Console.WriteLine("Enter Username");
-            string username = Console.ReadLine();
-            Console.WriteLine("Enter password");
-            string password = Console.ReadLine();
-            Console.WriteLine("Enter Email");
-            string email = Console.ReadLine();
-            Console.WriteLine("User created:\n");
-            User newUser = new User(username, password, email);
-            Console.WriteLine("Username: {0} \nPassword: {1} \nEmail: {2} \n", newUser._Username, newUser._Password, newUser._Email);
-            return newUser;
-        }
+            // initiate a new Tcp connection
 
-        static void Main(string[] args)
-        {
-            
-            
-            string input = "y";
-            while (input != "q")
+            Console.CancelKeyPress += (sender, e) => Environment.Exit(0);
+            Console.WriteLine("starting Server... ");
+
+
+            List<Task> tasks = new List<Task>();
+            TcpListener listener = new TcpListener(IPAddress.Loopback, 8000);
+            listener.Start(5);
+            try
             {
-                Console.WriteLine("choose a command");
-                Console.WriteLine("u: create new User");
-                Console.WriteLine("q: Quit the program");
-
-                input = Console.ReadLine();
-                if(input == "u")
-                {   
-                    
+                while (true)
+                {
+                    var socket = await listener.AcceptTcpClientAsync();
+                    tasks.Add(Task.Run(() => SingleConnection(socket)));
+                    Console.WriteLine("connected: ");
                 }
-
             }
-            
+            catch (Exception exc)
+            {
+                Console.WriteLine("error occurred: " + exc.Message);
+            }
+
+            Task.WaitAll(tasks.ToArray());
         }
+
+
+
+        // the "main menu" for a single connection with all its working classes
+        public static void SingleConnection(TcpClient client)
+        {
+            Action<string> debug = message => Console.WriteLine(message);
+
+
+            debug("starting connection...");
+            using var writer = new StreamWriter(client.GetStream()) { AutoFlush = true };
+            using var reader = new StreamReader(client.GetStream());
+            Unwrapper wrapper = new Unwrapper(reader);
+            RequestContext request;
+            request = wrapper.unwrap();
+            ResponseHandler response = new ResponseHandler(writer);
+            response.response(request, myDB);
+            client.Close();
+        }
+
     }
+
 }

@@ -5,13 +5,13 @@ using System.Text;
 namespace MonsterTradingCardGame1
 {
 
-    class User
+    public class User
     {
-        public string _Username { get; protected set; }
-        public string _Password { get; protected set; }
+        public string _Username { get;  set; }
+        public string _Password { get;  set; }
        
 
-        public int _Coins { get; protected set; }
+        public int _Coins { get;  set; }
 
 
         public List<Card> stack = new List<Card>();
