@@ -33,24 +33,37 @@ namespace MonsterTradingCardGame1
                         switch (request.http_verb)
                     {
                             case "GET":
-                               manager.getUser(userbuffer1.Username);
+                                load=manager.getUser(userbuffer1.Username);
                                 break;
                             case "POST":
-                                manager.setUser(userbuffer1.Username,userbuffer1.Password);
+                                load=manager.setUser(userbuffer1.Username,userbuffer1.Password);
 
                                 break;
                             case "DELETE":
-                                manager.deleteUser(userbuffer1.Username);
+                                load=manager.deleteUser(userbuffer1.Username);
 
                                 break;
                                
                             default:
-                                Console.WriteLine("ERROR");
+                                Console.WriteLine("ERROR1");
                                 break;
                     }
                         break;
-                    case "sessions ":
+                    case "sessions":
                         User userbuffer2 = JsonConvert.DeserializeObject<User>(request.json);
+                        switch (request.http_verb)
+                        {
+                            case "POST":
+                                load = manager.login(userbuffer2.Username, userbuffer2.Password);
+                                break;
+                            case "DELETE":
+                                load = manager.logout(userbuffer2.Username, userbuffer2.Password);
+                                break;
+
+                            default:
+                                Console.WriteLine("ERROR2");
+                                break;
+                        }
 
                         break;
                     case "packages ":
@@ -60,7 +73,7 @@ namespace MonsterTradingCardGame1
                    
 
                     default:
-                        Console.WriteLine("ERROR");
+                        Console.WriteLine("ERROR3");
                         break;
                 }
 
