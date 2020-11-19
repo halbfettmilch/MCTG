@@ -29,18 +29,18 @@ namespace MonsterTradingCardGame1
                 switch (arr[1])
                 {
                     case "users":
-                        User userbuffer = JsonConvert.DeserializeObject<User>(request.json);
+                        User userbuffer1 = JsonConvert.DeserializeObject<User>(request.json);
                         switch (request.http_verb)
                     {
                             case "GET":
-                               manager.getUser(userbuffer.Username);
+                               manager.getUser(userbuffer1.Username);
                                 break;
                             case "POST":
-                                manager.setUser(userbuffer.Username,userbuffer.Password);
+                                manager.setUser(userbuffer1.Username,userbuffer1.Password);
 
                                 break;
                             case "DELETE":
-                                manager.deleteUser(userbuffer.Username);
+                                manager.deleteUser(userbuffer1.Username);
 
                                 break;
                                
@@ -50,6 +50,8 @@ namespace MonsterTradingCardGame1
                     }
                         break;
                     case "sessions ":
+                        User userbuffer2 = JsonConvert.DeserializeObject<User>(request.json);
+
                         break;
                     case "packages ":
                         break;
@@ -62,42 +64,7 @@ namespace MonsterTradingCardGame1
                         break;
                 }
 
-                
-                
-                /*switch (request.http_verb)
-                {
-                    case "GET":
-                        if (id > 0)
-                        {
-                           
-                        }
-                        else
-                        {
-                           
-                        }
-
-                        break;
-                    case "POST":
-
-                        
-
-                        break;
-                    case "PUT":
-                       
-                        break;
-                    case "DELETE":
-                       
-                        break;
-
-                    default:
-                        break;
-
-
-                }
-                */
-
-
-                // the response to send with the streamwriter
+               
                 string response =
                     string.Format(
                         "{0} {1}\r\nServer: {2}\r\nContent-Type: {3}\r\nAccept-Ranges: bytes\r\nContent-Lenght: {4}\r\n\r\n {5}\r\n",

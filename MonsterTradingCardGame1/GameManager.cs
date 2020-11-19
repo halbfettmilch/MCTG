@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 
 namespace MonsterTradingCardGame1
@@ -10,6 +11,8 @@ namespace MonsterTradingCardGame1
         private static GameManager single_instance = null;
 
         private List<User> users = new List<User>();
+
+        public string response { get; set; }
 
         
 
@@ -26,33 +29,61 @@ namespace MonsterTradingCardGame1
             return single_instance;
         }
 
+       public void setLoad(GameManager manager)
+        {
+            manager.response = this.response;
+        }
+
 
         // functions to interact with private components
         public User getUser(string username)
         {
-            int i=0;
-            do
+            try
             {
-               
-                if (users.Count<i)
+
+
+                for (int i = 0; i < users.Count; i++)
                 {
-                    Console.WriteLine("ERROR; USER NOT FOUND");
-                    break;
+                    if ((users[i].Username == username))
+                    {
+                        Console.WriteLine("USER found:  {0}", users[i].Username);
+                        this.response = "USER found:  {0}" + users[i].Username;
+                        return users[i];
+                        
+                    }
                 }
-                i++;
-            } while (users[i].Username != username);
-           
-            return users[i];
+                throw new Exception("ERROR; USER NOT FOUND");
+                
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("{0}",exc);
+                return new User("","");
+            }
+
+
+
         }
         public void setUser(string username, string password)
         {
-            for (int i = 0; i < users.Count; i++)
+            try
             {
-                if (users[i].Username == username)
-                {   
-                    Console.WriteLine("ERROR; USER ALLREADY EXISTS");
-                    break;
+
+
+                for (int i = 0; i < users.Count; i++)
+                {
+                    if ((users[i].Username == username))
+                    {
+                        throw new Exception("ERROR; USER ALLREADY EXISTS");
+                      
+                    }
                 }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("{0}", exc);
+                return;
+
             }
             User newuser = new User(username, password);
             users.Add(newuser);
@@ -62,40 +93,29 @@ namespace MonsterTradingCardGame1
 
         public void deleteUser(string username)
         {
-            int i = 0;
-            do
+            try
             {
-                
-                if (users[i] == null)
+
+
+                for (int i = 0; i < users.Count; i++)
                 {
-                    Console.WriteLine("ERROR; USER NOT FOUND");
-                    break;
+                    if ((users[i].Username == username))
+                    {   
+                        Console.WriteLine("USER DELETED:  {0}", users[i].Username);
+                        users.RemoveAt(i);
+                        return;
+                    }
                 }
-                i++;
-            } while (users[i].Username != username);
-            users.RemoveAt(i);
-            Console.WriteLine("USER DELETED");
+                throw new Exception("NO SUCH USER FOUND");
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("{0}", exc);
+            }
         }
 
-        /*public void changePassword(string password, string username)
-        {
-            int i = 0;
-            do
-            {
-                
-                if (users[i] == null)
-                {
-                    Console.WriteLine("ERROR; USER NOT FOUND");
-                    break;
-                }
-                i++;
-            } while (users[i].Username != username);
-
-            users[i].Password = password;
-            Console.WriteLine("Password changed successfully");
-        }
-        */
-
+       
 
 
     }
