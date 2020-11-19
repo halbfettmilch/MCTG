@@ -4,12 +4,12 @@ using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    public class FireDragon : Card
+    public class Dragon : Card
     {
 
 
         
-        public FireDragon()
+        public Dragon()
         {
             _Name = "FireDragon";
             _Description = "...";

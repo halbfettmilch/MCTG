@@ -67,6 +67,7 @@ namespace MonsterTradingCardGame1
 
                         break;
                     case "packages ":
+                        var packageBuffer1 = JsonConvert.DeserializeObject<Package>(request.json); // maybe var or package
                         break;
                     case "transactions":
                         break;

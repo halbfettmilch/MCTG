@@ -25,7 +25,6 @@ namespace MonsterTradingCardGame1
         {
             this.Username = username;
             this.Password = password;
-           
             this.Coins = 20;
             
         }
