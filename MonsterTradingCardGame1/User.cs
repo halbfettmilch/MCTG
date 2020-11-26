@@ -18,6 +18,7 @@ namespace MonsterTradingCardGame1
 
         public List<Card> deck = new List<Card>();
 
+        public List<Package> packages = new List<Package>();
 
 
 

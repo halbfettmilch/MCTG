@@ -38,6 +38,7 @@ namespace MonsterTradingCardGame1
                     arr = message.Split(" ", 2);
                     if (arr.Length == 2)
                     {
+                       
                         buffer.Add(arr[0], arr[1]);
                     }
 
@@ -54,6 +55,7 @@ namespace MonsterTradingCardGame1
                 }
                 debug($"received: " + json);
                 request.json = json;
+               
 
                 /*
                   SortedDictionary<string, string> bufferdic = JsonConvert.DeserializeObject<SortedDictionary<string, string>>(json);

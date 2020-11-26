@@ -1,41 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    public class Kraken : Card
+    public class GoblinKing : Card
     {
 
 
         
-        public Kraken()
+        public GoblinKing()
         {
-            _Name = "ElderKraken";
+            _Name = "GoblinKing";
             _Description = "...";
             _Type = 1;
-            _element = "Water";
-            _Race = "Kraken";
-            _attack = 8;
+            _element = "Normal";
+            _Race = "Goblin";
+            _attack = 5;
         }
 
         public override int cardBattle(Card enemyCard)
         {
-
             int CombatDMG = this._attack;
-            if (enemyCard._Type == 2)
+            if (enemyCard._Race == "Dragon")
             {
                 CombatDMG = 0;
             }
 
-            
-
             return CombatDMG;
+            
+            
         }
+        
 
-
-
-
+       
+        
     }
 }

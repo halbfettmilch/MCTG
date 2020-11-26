@@ -11,11 +11,13 @@ namespace MonsterTradingCardGame1
 {
     class Program
     {
-        static GameManager myDB = new GameManager();
+        private static GameManager myGm = GameManager.getInstance();
+        
+        
         static async Task Main(string[] args)
         {
             // initiate a new Tcp connection
-
+            
             Console.CancelKeyPress += (sender, e) => Environment.Exit(0);
             Console.WriteLine("starting Server... ");
 
@@ -55,7 +57,7 @@ namespace MonsterTradingCardGame1
             RequestContext request;
             request = wrapper.unwrap();
             ResponseHandler response = new ResponseHandler(writer);
-            response.response(request, myDB);
+            response.response(request, myGm);
             client.Close();
         }
 

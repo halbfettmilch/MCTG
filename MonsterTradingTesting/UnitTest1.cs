@@ -15,7 +15,7 @@ namespace MonsterTradingTesting
         public void Test1()
         {
             var goblintest = new GoblinKing();
-            var dragons = new Dragon();
+            var dragons = new FireDragon();
             int dmg=goblintest.cardBattle(dragons);
             Assert.AreEqual(0,dmg);
         }

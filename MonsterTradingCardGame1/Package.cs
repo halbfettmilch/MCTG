@@ -5,9 +5,22 @@ using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    class Package
+    public class Package
     {
-        public List<Card> package = new List<Card>();
+         public List<Card> package = new List<Card>(); 
+
         public int price { get; set; }
+
+        public int size { get; set; }
+
+        public Package()
+        {
+            this.price = 5;
+            this.size = 5;
+        }
     }
+
+    
+
+    
 }

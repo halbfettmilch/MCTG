@@ -14,15 +14,7 @@ namespace MonsterTradingCardGame1
 
         private List<User> loggedIn = new List<User>();
 
-
-
-
-
-
-
-
-
-        //Only a Single instance shall exist so it does not get deleted by multithreading
+        private List<Card> cardlist = new List<Card>();
 
         public static GameManager getInstance()
         {
@@ -30,10 +22,33 @@ namespace MonsterTradingCardGame1
             {
                 single_instance = new GameManager();
             }
+            
+            single_instance.cardlist.Add(new GoblinKing());
+            single_instance.cardlist.Add(new ElderKraken());
+            single_instance.cardlist.Add(new OrkBoys());
+            single_instance.cardlist.Add(new FireDragon());
+            single_instance.cardlist.Add(new FireElveShaman());
+            single_instance.cardlist.Add(new GreyKnight());
+            single_instance.cardlist.Add(new WizzardNovice());
             return single_instance;
         }
+        
+        
 
-      
+       
+
+        // help functions
+
+        public Card returnRandomCard()
+        {   
+            Random rnd = new Random();
+            int number = rnd.Next(0, cardlist.Count);
+            Card random=cardlist[number];
+            return random;
+
+        }
+
+
 
 
         // functions to interact with private components
@@ -177,9 +192,85 @@ namespace MonsterTradingCardGame1
                 return "The Username or Password is Wrong or User is currently not logged in";
             }
         }
+
+        //Card battle logic
+        public string battleLogic(Card card1, Card card2)
+        {
+            if (card1.cardBattle(card2) > card2.cardBattle(card1))
+            {
+                return "The card " + card1._Name + "of player 1 won";
+            }
+            else if (card1.cardBattle(card2) < card2.cardBattle(card1))
+            {
+                return "The card " + card2._Name + "of player 2 won";
+            }
+
+                return "The card were of Equal Power";
+        }
+
+        public string acuirePackage(string username)
+        {
+            
+           
+            for (int i = 0; i < users.Count; i++)
+            {
+                if ((users[i].Username == username))
+                {
+                    Console.WriteLine("USER found:  {0}", users[i].Username);
+                    Package package = new Package();
+                    if (users[i].Coins < package.price)
+                    {
+                        return "not enough coins";
+                    }
+
+                    for (int j = 0; j <= package.size; j++)
+                    {
+                       
+                        package.package.Add(returnRandomCard());
+                        // response += j + " " + randomcard._Name +"\n";
+                    }
+                    users[i].packages.Add(package);
+                    users[i].Coins -= package.price;
+                    return users[i].Username + "bought a package";
+
+
+                }
+            }
+
+            return "user not found";
+        }
+
+        public string openPackage(string username)
+        {
+            string response = "Cards found: \n";
+            for (int i = 0; i < users.Count; i++)
+            {
+                if ((users[i].Username == username))
+                {
+                    Console.WriteLine("USER found:  {0}", users[i].Username);
+                    if (users[i].packages.Count > 0)
+                    {
+                        Package userpackage = users[i].packages[0];
+                        for (int j = 0; j <= userpackage.size; j++)
+                        {
+                            users[i].stack.Add(userpackage.package[j]);
+                            response +="Card "+ j +" : " + userpackage.package[j]._Name + "\n";
+                        }
+                        users[i].packages.RemoveAt(0);
+                        return response;
+                    }
+
+                    response = "No packages left";
+                    return response;
+                }
+            }
+
+            response = "User " + username + " not found";
+            return response;
+        }
     }
 
-        
+    
 
        
 

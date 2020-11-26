@@ -23,7 +23,7 @@ namespace MonsterTradingCardGame1
             string status = "200 OK";
             string mime = "text/html";
             string load = "";
-
+            
             if ((arr.Length == 2 || arr.Length == 3))
             {
                 switch (arr[1])
@@ -66,10 +66,13 @@ namespace MonsterTradingCardGame1
                         }
 
                         break;
-                    case "packages ":
-                        var packageBuffer1 = JsonConvert.DeserializeObject<Package>(request.json); // maybe var or package
+                    case "transactions ":
+                        User userbuffer3 = JsonConvert.DeserializeObject<User>(request.json);
+                        load = manager.acuirePackage(userbuffer3.Username);
                         break;
-                    case "transactions":
+                    case "packages":
+                        User userbuffer4 = JsonConvert.DeserializeObject<User>(request.json);
+                        load = manager.openPackage(userbuffer4.Username);
                         break;
                    
 
