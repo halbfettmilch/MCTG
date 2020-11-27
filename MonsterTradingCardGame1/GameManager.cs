@@ -205,7 +205,7 @@ namespace MonsterTradingCardGame1
                 return "The card " + card2._Name + "of player 2 won";
             }
 
-                return "The card were of Equal Power";
+            return "The card were of Equal Power";
         }
 
         public string acuirePackage(string username)
@@ -223,7 +223,7 @@ namespace MonsterTradingCardGame1
                         return "not enough coins";
                     }
 
-                    for (int j = 0; j <= package.size; j++)
+                    for (int j = 0; j < package.size; j++)
                     {
                        
                         package.package.Add(returnRandomCard());
@@ -231,7 +231,7 @@ namespace MonsterTradingCardGame1
                     }
                     users[i].packages.Add(package);
                     users[i].Coins -= package.price;
-                    return users[i].Username + "bought a package";
+                    return users[i].Username + " bought a package";
 
 
                 }
@@ -251,12 +251,13 @@ namespace MonsterTradingCardGame1
                     if (users[i].packages.Count > 0)
                     {
                         Package userpackage = users[i].packages[0];
-                        for (int j = 0; j <= userpackage.size; j++)
+                        for (int j = 0; j < userpackage.size; j++)
                         {
                             users[i].stack.Add(userpackage.package[j]);
-                            response +="Card "+ j +" : " + userpackage.package[j]._Name + "\n";
+                            response +="Card "+ (j+1) +" : " + userpackage.package[j]._Name + "\n";
                         }
                         users[i].packages.RemoveAt(0);
+                        users[i].stack.Sort((x, y) => x._Name.CompareTo(y._Name));
                         return response;
                     }
 
@@ -268,9 +269,29 @@ namespace MonsterTradingCardGame1
             response = "User " + username + " not found";
             return response;
         }
+
+        public string showUsercards(string username)
+        {
+            int j = 1;
+            string response="ALL Cards:\n";
+            for (int i = 0; i < users.Count; i++)
+            {
+                if ((users[i].Username == username))
+                {
+                    Console.WriteLine("USER found:  {0}", users[i].Username);
+                    foreach (Card card in users[i].stack)
+                    {
+                        response += j + " " + card._Name + "\n";
+                        j++;
+                    }
+                    return response;
+                }
+            }
+            response = "User " + username + " not found";
+            return response;
+        }
     }
 
-    
 
        
 

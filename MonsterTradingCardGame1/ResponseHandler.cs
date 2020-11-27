@@ -66,7 +66,7 @@ namespace MonsterTradingCardGame1
                         }
 
                         break;
-                    case "transactions ":
+                    case "transactions":
                         User userbuffer3 = JsonConvert.DeserializeObject<User>(request.json);
                         load = manager.acuirePackage(userbuffer3.Username);
                         break;
@@ -74,7 +74,11 @@ namespace MonsterTradingCardGame1
                         User userbuffer4 = JsonConvert.DeserializeObject<User>(request.json);
                         load = manager.openPackage(userbuffer4.Username);
                         break;
-                   
+                    case "cards":
+                        User userbuffer5 = JsonConvert.DeserializeObject<User>(request.json);
+                        load = manager.showUsercards(userbuffer5.Username);
+                        break;
+
 
                     default:
                         Console.WriteLine("ERROR3");
