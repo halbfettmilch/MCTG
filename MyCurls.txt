@@ -34,40 +34,56 @@ echo.
 Open Package
 REM ----------------
 echo 3) Open packages
-curl -X POST http://localhost:8000/packages --header "Content-Type: application/json" -d "{\"Username\":\"kienboec\"}"
+curl -X POST http://localhost:8000/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
 echo.	
-curl -X POST http://localhost:8000/packages --header "Content-Type: application/json" -d "{\"Username\":\"altenhof\"}"
-echo.																																																																																	 				    
+																																																																															 				    
 
 
 echo 4) acquire packages kienboec
-curl -X POST http://localhost:8000/transactions --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Username\":\"kienboec\"}"
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
 echo.
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
+echo.
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
+echo.
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
+echo.
+echo should fail (no money):
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
+echo.
+echo.
+
 
 
 echo 5) acquire packages altenhof
-curl -X POST http://localhost:8000/transactions --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "{\"Username\":\"altenhof\"}"
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+echo.
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+echo.
+echo should fail (no package):
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+echo.
 echo.
 
 
-echo 7) acquire newly created packages altenhof
-curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+echo 6) acquire newly created packages altenhof
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
 echo.
-curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
 echo.
 echo should fail (no money):
-curl -X POST http://localhost:10001/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
+curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
 echo.
 echo.
 
-echo 8) show all acquired cards kienboec
-curl -X GET http://localhost:10001/cards --header "Authorization: Basic kienboec-mtcgToken"
+echo 7) show all acquired cards kienboec
+curl -X GET http://localhost:8000/cards --header "Authorization: Basic kienboec-mtcgToken"
 echo should fail (no token)
-curl -X GET http://localhost:10001/cards --header "Content-Type: application/json" -d "{\"Username\":\"kienboec\"}"
+curl -X GET http://localhost:8000/cards 
 echo.
 echo.
 
-echo 9) show all acquired cards altenhof
+echo 8) show all acquired cards altenhof
 curl -X GET http://localhost:10001/cards --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.

@@ -2,6 +2,7 @@
 
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace MonsterTradingCardGame1
@@ -23,41 +24,46 @@ namespace MonsterTradingCardGame1
             string status = "200 OK";
             string mime = "text/html";
             string load = "";
-            
+
             if ((arr.Length == 2 || arr.Length == 3))
             {
                 switch (arr[1])
                 {
                     case "users":
-                        User userbuffer1 = JsonConvert.DeserializeObject<User>(request.json);
+                        JObject obj = JObject.Parse(request.json);
+                        string name = (string)obj["Username"];
+                        string password = (string)obj["Password"];
                         switch (request.http_verb)
-                    {
+                        {
                             case "GET":
-                                load=manager.getUser(userbuffer1.Username);
+
+                                load = manager.getUser(name);
                                 break;
                             case "POST":
-                                load=manager.setUser(userbuffer1.Username,userbuffer1.Password);
+                                load = manager.setUser(name, password);
 
                                 break;
                             case "DELETE":
-                                load=manager.deleteUser(userbuffer1.Username);
+                                load = manager.deleteUser(name);
 
                                 break;
-                               
+
                             default:
                                 Console.WriteLine("ERROR1");
                                 break;
-                    }
+                        }
                         break;
                     case "sessions":
-                        User userbuffer2 = JsonConvert.DeserializeObject<User>(request.json);
+                        JObject obj1 = JObject.Parse(request.json);
+                        string name1 = (string)obj1["Username"];
+                        string password1 = (string)obj1["Password"];
                         switch (request.http_verb)
                         {
                             case "POST":
-                                load = manager.login(userbuffer2.Username, userbuffer2.Password);
+                                load = manager.login(name1, password1);
                                 break;
                             case "DELETE":
-                                load = manager.logout(userbuffer2.Username, userbuffer2.Password);
+                                load = manager.logout(name1, password1);
                                 break;
 
                             default:
@@ -67,16 +73,22 @@ namespace MonsterTradingCardGame1
 
                         break;
                     case "transactions":
-                        User userbuffer3 = JsonConvert.DeserializeObject<User>(request.json);
-                        load = manager.acuirePackage(userbuffer3.Username);
+                        switch (arr[2])
+                        {
+                            case "packages":
+                                string[] arrbuffer1 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.acuirePackage(arrbuffer1[1]);
+                                break;
+                        }
                         break;
+
                     case "packages":
-                        User userbuffer4 = JsonConvert.DeserializeObject<User>(request.json);
-                        load = manager.openPackage(userbuffer4.Username);
+                        string[] arrbuffer2 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                        load = manager.openPackage(arrbuffer2[1]);
                         break;
                     case "cards":
-                        User userbuffer5 = JsonConvert.DeserializeObject<User>(request.json);
-                        load = manager.showUsercards(userbuffer5.Username);
+                        string[] arrbuffer3 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                        load = manager.showUsercards(arrbuffer3[1]);
                         break;
 
 
@@ -85,7 +97,7 @@ namespace MonsterTradingCardGame1
                         break;
                 }
 
-               
+
                 string response =
                     string.Format(
                         "{0} {1}\r\nServer: {2}\r\nContent-Type: {3}\r\nAccept-Ranges: bytes\r\nContent-Lenght: {4}\r\n\r\n {5}\r\n",
