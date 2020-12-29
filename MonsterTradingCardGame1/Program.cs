@@ -17,7 +17,10 @@ namespace MonsterTradingCardGame1
         static async Task Main(string[] args)
         {
             // initiate a new Tcp connection
-            
+            //check Database connection
+            DatabaseService.TestConnection();
+            DatabaseService.InsertRecord("vollmilch");
+
             Console.CancelKeyPress += (sender, e) => Environment.Exit(0);
             Console.WriteLine("starting Server... ");
 

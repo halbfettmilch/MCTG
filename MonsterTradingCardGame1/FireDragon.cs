@@ -17,6 +17,7 @@ namespace MonsterTradingCardGame1
             _element = "Fire";
             _Race = "Dragon";
             _attack = 4;
+            
         }
 
         public override int cardBattle(Card enemyCard)

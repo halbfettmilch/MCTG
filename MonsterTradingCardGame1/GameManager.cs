@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
-
 namespace MonsterTradingCardGame1
 {
     public class GameManager
