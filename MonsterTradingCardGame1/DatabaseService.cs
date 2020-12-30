@@ -11,7 +11,8 @@ namespace MonsterTradingCardGame1
         public static void TestConnection()
         {
             using (NpgsqlConnection con = GetConnection())
-            {   con.Open();
+            {
+                con.Open();
                 if (con.State == ConnectionState.Open)
                 {
                     Console.WriteLine("connected to DB");
@@ -21,25 +22,29 @@ namespace MonsterTradingCardGame1
             }
         }
 
-        public static void InsertRecord(string username, string password)
+        public static string InsertUser(string username, string password)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-               
-                string query=@"insert into public.Users(username,password)values('"+username+"','"+password+"')";
-                NpgsqlCommand cmd = new NpgsqlCommand(query,con);
+
+                string query = @"insert into public.Users(username,userpassword,coins)values('" + username + "','" + password + "',20)";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 int n = cmd.ExecuteNonQuery();
-               if (n==1)
+                if (n == 1)
                 {
-                    Console.WriteLine("Value inserted");
+                    Console.WriteLine("User Created");
+                    return "New User Created";
                 }
-                else Console.WriteLine("Value not inserted");
-               con.Close();
+
+                Console.WriteLine("User not Created");
+                con.Close();
+                return "User allready exists";
+
             }
         }
 
-        public static void DeleteRecord(string username)
+        public static string DeleteUser(string username)
         {
             using (NpgsqlConnection con = GetConnection())
             {
@@ -49,12 +54,53 @@ namespace MonsterTradingCardGame1
                 int n = cmd.ExecuteNonQuery();
                 if (n == 1)
                 {
-                    Console.WriteLine("User");
+                    Console.WriteLine("User " + username + " deleted");
+                    return "User deleted";
                 }
-                else Console.WriteLine("Value not inserted");
+                Console.WriteLine("User " + username + " not found");
+                con.Close();
+                return "ERROR User not deleted";
+            }
+        }
+
+        public static void InsertCardStack(string cardname, string cardowner)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = @"insert into public.cards(cardname,cardowner,cardstatus)values('" + cardname + "','" + cardowner + "',1)";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                int n = cmd.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Card added to Stack");
+                }
+                else Console.WriteLine("ERROR");
                 con.Close();
             }
         }
+
+        public static void InsertCardDeck(string cardname, string cardowner)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = @"insert into public.cards(cardname,cardowner,cardstatus)values('" + cardname + "','" + cardowner + "',2)";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                int n = cmd.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Card added to stack");
+                }
+                else Console.WriteLine("ERROR");
+                con.Close();
+            }
+        }
+
+
+
         public static NpgsqlConnection GetConnection()
         {
             return new NpgsqlConnection(@"Server=localhost;Port=5433;User Id=postgres;Password=postgres;Database=mctg");

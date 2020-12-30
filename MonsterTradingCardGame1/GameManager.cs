@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 
 namespace MonsterTradingCardGame1
@@ -21,7 +22,10 @@ namespace MonsterTradingCardGame1
             {
                 single_instance = new GameManager();
             }
-            
+
+
+
+
             single_instance.cardlist.Add(new GoblinKing());
             single_instance.cardlist.Add(new ElderKraken());
             single_instance.cardlist.Add(new OrkBoys());
@@ -31,18 +35,18 @@ namespace MonsterTradingCardGame1
             single_instance.cardlist.Add(new WizzardNovice());
             return single_instance;
         }
-        
-        
 
-       
+
+
+
 
         // help functions
 
         public Card returnRandomCard()
-        {   
+        {
             Random rnd = new Random();
             int number = rnd.Next(0, cardlist.Count);
-            Card random=cardlist[number];
+            Card random = cardlist[number];
             return random;
 
         }
@@ -62,17 +66,17 @@ namespace MonsterTradingCardGame1
                     if ((users[i].Username == username))
                     {
                         Console.WriteLine("USER found:  {0}", users[i].Username);
-                        
-                        return "User found: "+ users[i].Username;
-                        
+
+                        return "User found: " + users[i].Username;
+
                     }
                 }
                 throw new Exception("ERROR; USER NOT FOUND");
-                
+
             }
             catch (Exception exc)
             {
-                Console.WriteLine("{0}",exc);
+                Console.WriteLine("{0}", exc);
                 return "User not found";
             }
 
@@ -81,6 +85,10 @@ namespace MonsterTradingCardGame1
         }
         public string setUser(string username, string password)
         {
+
+            return (DatabaseService.InsertUser(username, password));
+
+            /*
             try
             {
 
@@ -104,11 +112,16 @@ namespace MonsterTradingCardGame1
             users.Add(newuser);
             Console.WriteLine("NEW USER CREATED");
             return "New User Created";
+            */
 
         }
 
         public string deleteUser(string username)
         {
+
+            return(DatabaseService.DeleteUser(username));
+
+            /*
             try
             {
 
@@ -130,6 +143,7 @@ namespace MonsterTradingCardGame1
                 Console.WriteLine("{0}", exc);
                 return "Could not find that User";
             }
+            */
         }
 
         public string login(string username, string password)
@@ -150,7 +164,7 @@ namespace MonsterTradingCardGame1
 
                 for (int i = 0; i < users.Count; i++)
                 {
-                    if ((users[i].Username == username && users[i].Password==password))
+                    if ((users[i].Username == username && users[i].Password == password))
                     {
                         Console.WriteLine("USER LOGGED IN  {0}", users[i].Username);
                         User newuser = new User(username, password);
@@ -178,7 +192,7 @@ namespace MonsterTradingCardGame1
                     if ((loggedIn[i].Username == username && loggedIn[i].Password == password))
                     {
                         Console.WriteLine("USER LOGGED OUT  {0}", loggedIn[i].Username);
-                        
+
                         return "Log out was successful";
                     }
                 }
@@ -209,8 +223,8 @@ namespace MonsterTradingCardGame1
 
         public string acuirePackage(string username)
         {
-            
-           
+
+
             for (int i = 0; i < users.Count; i++)
             {
                 if ((users[i].Username == username))
@@ -224,7 +238,7 @@ namespace MonsterTradingCardGame1
 
                     for (int j = 0; j < package.size; j++)
                     {
-                       
+
                         package.package.Add(returnRandomCard());
                         // response += j + " " + randomcard._Name +"\n";
                     }
@@ -253,7 +267,7 @@ namespace MonsterTradingCardGame1
                         for (int j = 0; j < userpackage.size; j++)
                         {
                             users[i].stack.Add(userpackage.package[j]);
-                            response +="Card "+ (j+1) +" : " + userpackage.package[j]._Name + "\n";
+                            response += "Card " + (j + 1) + " : " + userpackage.package[j]._Name + "\n";
                         }
                         users[i].packages.RemoveAt(0);
                         users[i].stack.Sort((x, y) => x._Name.CompareTo(y._Name));
@@ -272,7 +286,7 @@ namespace MonsterTradingCardGame1
         public string showUsercards(string username)
         {
             int j = 1;
-            string response="ALL Cards:\n";
+            string response = "ALL Cards:\n";
             for (int i = 0; i < users.Count; i++)
             {
                 if ((users[i].Username == username))
@@ -292,8 +306,8 @@ namespace MonsterTradingCardGame1
     }
 
 
-       
 
 
-    
+
+
 }

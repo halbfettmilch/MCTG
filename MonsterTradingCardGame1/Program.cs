@@ -19,7 +19,7 @@ namespace MonsterTradingCardGame1
             // initiate a new Tcp connection
             //check Database connection
             DatabaseService.TestConnection();
-            DatabaseService.InsertRecord("vollmilch");
+            //DatabaseService.InsertUser("vollmilch","123");
 
             Console.CancelKeyPress += (sender, e) => Environment.Exit(0);
             Console.WriteLine("starting Server... ");
