@@ -7,6 +7,7 @@ DROP TABLE cards;
 CREATE Table IF NOT EXISTS users(
 username TEXT,
 userpassword TEXT,
+userstatus INT,
 coins int
 );
 
@@ -16,11 +17,5 @@ cardowner TEXT,
 cardstatus int
 );
 
-
-
-CREATE Table IF NOT EXISTS Stack(
-StackID int, --PK
-Cardname string,
-);
 
 

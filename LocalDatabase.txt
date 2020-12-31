@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -22,6 +22,10 @@ namespace MonsterTradingCardGame1
             {
                 single_instance = new GameManager();
             }
+
+
+
+
             single_instance.cardlist.Add(new GoblinKing());
             single_instance.cardlist.Add(new ElderKraken());
             single_instance.cardlist.Add(new OrkBoys());
@@ -31,7 +35,6 @@ namespace MonsterTradingCardGame1
             single_instance.cardlist.Add(new WizzardNovice());
             return single_instance;
         }
-
 
 
 
@@ -85,7 +88,31 @@ namespace MonsterTradingCardGame1
 
             return (DatabaseService.InsertUser(username, password));
 
-            
+            /*
+            try
+            {
+
+
+                for (int i = 0; i < users.Count; i++)
+                {
+                    if ((users[i].Username == username))
+                    {
+                        throw new Exception("Username allready in use");
+                        
+                    }
+                }
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("{0}", exc);
+                return "User allready exists";
+
+            }
+            User newuser = new User(username, password);
+            users.Add(newuser);
+            Console.WriteLine("NEW USER CREATED");
+            return "New User Created";
+            */
 
         }
 
@@ -94,7 +121,29 @@ namespace MonsterTradingCardGame1
 
             return(DatabaseService.DeleteUser(username));
 
-            
+            /*
+            try
+            {
+
+
+                for (int i = 0; i < users.Count; i++)
+                {
+                    if ((users[i].Username == username))
+                    {   
+                        Console.WriteLine("USER DELETED:  {0}", users[i].Username);
+                        users.RemoveAt(i);
+                        return "User deleted";
+                    }
+                }
+                throw new Exception("NO SUCH USER FOUND");
+
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine("{0}", exc);
+                return "Could not find that User";
+            }
+            */
         }
 
         public string login(string username, string password)
