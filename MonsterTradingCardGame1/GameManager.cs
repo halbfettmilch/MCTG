@@ -47,11 +47,22 @@ namespace MonsterTradingCardGame1
             return random;
 
         }
+        private Package createPackage()
+        {
+            Package package = new Package();
+            for (int j = 0; j < package.size; j++)
+            {
+                package.package.Add(returnRandomCard());
+                // response += j + " " + randomcard._Name +"\n";
+            }
+
+            return package;
+
+        }
 
 
 
-
-        // functions to interact with private components
+        // Interaction with Database
         public string getUser(string username)
         {
             try
@@ -83,78 +94,27 @@ namespace MonsterTradingCardGame1
         public string setUser(string username, string password)
         {
 
-            return (DatabaseService.InsertUser(username, password));
+            return DatabaseService.InsertUser(username, password);
 
-            
+
 
         }
 
         public string deleteUser(string username)
         {
 
-            return(DatabaseService.DeleteUser(username));
+            return DatabaseService.DeleteUser(username);
 
-            
+
         }
 
         public string login(string username, string password)
         {
-            try
-            {
-                //hier function zum ausloggen oder einloggen je nach status
-
-                for (int i = 0; i < loggedIn.Count; i++)
-                {
-                    if ((loggedIn[i].Username == username && loggedIn[i].Password == password))
-                    {
-                        Console.WriteLine("USER LOGGED OUT  {0}", loggedIn[i].Username);
-                        loggedIn.RemoveAt(i);
-                        return "Log out was successful";
-                    }
-                }
-
-                for (int i = 0; i < users.Count; i++)
-                {
-                    if ((users[i].Username == username && users[i].Password == password))
-                    {
-                        Console.WriteLine("USER LOGGED IN  {0}", users[i].Username);
-                        User newuser = new User(username, password);
-                        loggedIn.Add(newuser);
-                        return "Log in was successful";
-                    }
-                }
-                throw new Exception("USERNAME OR PASSWORD WRONG");
-
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("{0}", exc);
-                return "The Username or Password is Wrong";
-            }
+            return DatabaseService.LogInUser(username, password);
         }
         public string logout(string username, string password)
         {
-            try
-            {
-                //Hier function nur zum ausloggen
-
-                for (int i = 0; i < loggedIn.Count; i++)
-                {
-                    if ((loggedIn[i].Username == username && loggedIn[i].Password == password))
-                    {
-                        Console.WriteLine("USER LOGGED OUT  {0}", loggedIn[i].Username);
-
-                        return "Log out was successful";
-                    }
-                }
-                throw new Exception("USERNAME OR PASSWORD WRONG");
-
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("{0}", exc);
-                return "The Username or Password is Wrong or User is currently not logged in";
-            }
+            return DatabaseService.LogOutUser(username, password);
         }
 
         //Card battle logic
@@ -172,87 +132,23 @@ namespace MonsterTradingCardGame1
             return "The cards were of Equal Power";
         }
 
+
         public string acuirePackage(string username)
         {
-
-
-            for (int i = 0; i < users.Count; i++)
+            string response = "";
+            Package package = createPackage();
+            for (int i = 0; i < package.size; i++)
             {
-                if ((users[i].Username == username))
-                {
-                    Console.WriteLine("USER found:  {0}", users[i].Username);
-                    Package package = new Package();
-                    if (users[i].Coins < package.price)
-                    {
-                        return "not enough coins";
-                    }
-
-                    for (int j = 0; j < package.size; j++)
-                    {
-
-                        package.package.Add(returnRandomCard());
-                        // response += j + " " + randomcard._Name +"\n";
-                    }
-                    users[i].packages.Add(package);
-                    users[i].Coins -= package.price;
-                    return users[i].Username + " bought a package";
-
-
-                }
+                response += DatabaseService.OpenPackage(package.package[i]._Name, username);
             }
-
-            return "user not found";
-        }
-
-        public string openPackage(string username)
-        {
-            string response = "Cards found: \n";
-            for (int i = 0; i < users.Count; i++)
-            {
-                if ((users[i].Username == username))
-                {
-                    Console.WriteLine("USER found:  {0}", users[i].Username);
-                    if (users[i].packages.Count > 0)
-                    {
-                        Package userpackage = users[i].packages[0];
-                        for (int j = 0; j < userpackage.size; j++)
-                        {
-                            users[i].stack.Add(userpackage.package[j]);
-                            response += "Card " + (j + 1) + " : " + userpackage.package[j]._Name + "\n";
-                        }
-                        users[i].packages.RemoveAt(0);
-                        users[i].stack.Sort((x, y) => x._Name.CompareTo(y._Name));
-                        return response;
-                    }
-
-                    response = "No packages left";
-                    return response;
-                }
-            }
-
-            response = "User " + username + " not found";
             return response;
         }
+
+       
 
         public string showUsercards(string username)
         {
-            int j = 1;
-            string response = "ALL Cards:\n";
-            for (int i = 0; i < users.Count; i++)
-            {
-                if ((users[i].Username == username))
-                {
-                    Console.WriteLine("USER found:  {0}", users[i].Username);
-                    foreach (Card card in users[i].stack)
-                    {
-                        response += j + " " + card._Name + "\n";
-                        j++;
-                    }
-                    return response;
-                }
-            }
-            response = "User " + username + " not found";
-            return response;
+            return DatabaseService.GetStackCards(username);
         }
     }
 

@@ -14,7 +14,8 @@ coins int
 CREATE TABLE IF NOT EXISTS cards(
 cardname TEXT,
 cardowner TEXT,
-cardstatus int
+cardstatus int,
+cardID int
 );
 
 

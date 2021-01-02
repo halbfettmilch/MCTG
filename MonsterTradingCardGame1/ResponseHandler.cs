@@ -81,10 +81,7 @@ namespace MonsterTradingCardGame1
                         }
                         break;
 
-                    case "packages":
-                        string[] arrbuffer2 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
-                        load = manager.openPackage(arrbuffer2[1]);
-                        break;
+                   
                     case "cards":
                         string[] arrbuffer3 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                         load = manager.showUsercards(arrbuffer3[1]);
