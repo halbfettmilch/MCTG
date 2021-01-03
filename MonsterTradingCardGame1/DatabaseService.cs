@@ -166,54 +166,91 @@ namespace MonsterTradingCardGame1
                 return "ERROR User not deleted";
             }
         }
-        //Änderungen nötig karte zuerst suchen VILLEICHT ID EINFÜHREN
-        public static string OpenPackage(string cardname, string cardowner)
+        public static string OpenPackage(string cardowner, Package package)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                int ok = 0;
-                int number=0;
-                while (ok != 1)
-                {
-                    Random rnd = new Random();
-                    number = rnd.Next(0, 10000000);
-                    string query1 = "SELECT count(cardID) FROM cards WHERE cardID =" + number;
-                    NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
-                    con.Open();
-                    var reader = cmd1.ExecuteReader();
-                    int cardcounter = 0;
-                    while (reader.Read())
-                    {
-                        cardcounter = reader.GetInt32(0);
-
-                    }
-                    con.Close();
-                    if (cardcounter == 0)
-                    {
-                        ok = 1;
-                    }
-                }
-                string query = @"insert into public.cards(cardname,cardowner,cardstatus,cardID)values('" + cardname + "','" + cardowner + "',0,"+number+")";
-                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                string query2 = "SELECT coins FROM users WHERE username = '" + cardowner+ "'";
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
                 con.Open();
-                int n = cmd.ExecuteNonQuery();
-                string response = "";
-                if (n != -1)
+                var reader1 = cmd2.ExecuteReader();
+                int usercoins = 0;
+                while (reader1.Read())
                 {
-                    response = cardname + "acuired\n";
-                    Console.WriteLine("card aquired");
-                    return response;
+                    
+                    usercoins = reader1.GetInt32(0);
+
+                }
+                if (usercoins < (package.price))
+                {
+                    return "Not enought coins ";
+
                 }
                 con.Close();
+               
+                string query3 = @"UPDATE users SET coins = coins - "+package.price+" WHERE username = '"+cardowner+"'";
+                NpgsqlCommand cmd3 = new NpgsqlCommand(query3, con);
+                con.Open();
+                int n1 = cmd3.ExecuteNonQuery();
+                string response = "";
+                if (n1 != -1)
+                {
+                    response = "Bought Package for "+package.price+" coins \n";
+                    Console.WriteLine("Package bought");
+                    
+                }
+                con.Close();
+                
+                for (int j = 0; j < package.size; j++)
+                {
+                    int ok = 0;
+                    int number = 0;
+                    while (ok != 1)
+                    {
+                        Random rnd = new Random();
+                        number = rnd.Next(0, 10000000);
+                        string query1 = "SELECT count(cardID) FROM cards WHERE cardID =" + number;
+                        NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                        con.Open();
+                        var reader = cmd1.ExecuteReader();
+                        int cardcounter = 0;
+                        while (reader.Read())
+                        {
+                            cardcounter = reader.GetInt32(0);
+
+                        }
+                        con.Close();
+                        if (cardcounter == 0)
+                        {
+                            ok = 1;
+                        }
+                    }
+                    string query = @"insert into public.cards(cardname,cardowner,cardstatus,cardID)values('" + package.package[j]._Name + "','" + cardowner + "',0," + number + ")";
+                    NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                    con.Open();
+                    int n = cmd.ExecuteNonQuery();
+                    con.Close();
+                    if (n != -1)
+                    {
+                        response += package.package[j]._Name + "acuired\n";
+                        Console.WriteLine(" card aquired");
+                        if (j == (package.size-1))
+                        {
+                            return response;
+                        }
+                    }
+                }
                 return "UNKNOWN ERROR";
             }
         }
-        //Änderungen nötig karte zuerst suchen VILLEICHT ID EINFÜHREN
-        public string MoveCardToDeck(string cardname, string cardowner)
+        //It would be possible to Curl with an explicit ID so a specific card would be added to the Deck
+
+        //NOT TESTED
+        public static string MoveCardToDeck(string cardname, string cardowner)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-                string query = "SELECT * FROM cards WHERE cardname = '" + cardname + "' AND cardowner = '" + cardowner + "' AND cardstatus = '0' LIMIT 1";
+                string query = "SELECT * FROM cards WHERE cardname = '" + cardname + "' AND cardowner = '" + cardowner + "' AND cardstatus = 0 LIMIT 1";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 var reader = cmd.ExecuteReader();
@@ -234,45 +271,57 @@ namespace MonsterTradingCardGame1
                 string query1 = "UPDATE cards SET cardstatus = 1 WHERE cardname ='" + newcardname + "' AND cardowner = '" + cardowner + "' ORDER BY cardname LIMIT 1";
                 NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
                 int n = cmd1.ExecuteNonQuery();
-                if (n != -1)
+                if (n == 1)
                 {
-                    Console.WriteLine("User Logged out");
+                    Console.WriteLine("Card Moved to Deck");
                     con.Close();
                     return newcardname + " added to deck";
                 }
                 return "UNKNOWN ERROR";
             }
         }
-
-        public string MoveCardToStack(string cardname, string cardowner)
+        //NOT TESTED
+        public static string MoveCardToStack(string cardname, string cardowner)
         {
             using (NpgsqlConnection con = GetConnection())
             {
-
-                string query = @"insert into public.cards(cardname,cardowner,cardstatus)values('" + cardname + "','" + cardowner + "',1)";
+                string query = "SELECT * FROM cards WHERE cardname = '" + cardname + "' AND cardowner = '" + cardowner + "' AND cardstatus = 1 LIMIT 1";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
-                int n = cmd.ExecuteNonQuery();
-                string response = "";
-                if (n != -1)
+                var reader = cmd.ExecuteReader();
+                string newcardname = "";
+                while (reader.Read())
                 {
-                    response = cardname + "added to Deck\n";
-                    Console.WriteLine("Card added to Deck");
-                    return response;
+                    newcardname = reader.GetString(0);
+
+                }
+                if (newcardname == "")
+                {
+
+                    return "No " + newcardname + " in your Deck";
 
                 }
                 con.Close();
-                return "No " + cardname + " cards found";
+                con.Open();
+                string query1 = "UPDATE cards SET cardstatus = 0 WHERE cardname ='" + newcardname + "' AND cardowner = '" + cardowner + "' ORDER BY cardname LIMIT 1";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                int n = cmd1.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Card Moved to Stack");
+                    con.Close();
+                    return newcardname + " removed from Deck";
+                }
+                return "UNKNOWN ERROR";
             }
         }
 
-
-        public static string GetStackCards(string cardowner)
+        public static string GetAllCards(string cardowner)
         {
             using (NpgsqlConnection con = GetConnection())
             {
 
-                string query = "SELECT cardname FROM cards WHERE cardowner = '" + cardowner + "' AND cardstatus = 0";
+                string query = "SELECT cardname FROM cards WHERE cardowner = '" + cardowner + "' ORDER BY cardname";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 var reader = cmd.ExecuteReader();
@@ -293,12 +342,39 @@ namespace MonsterTradingCardGame1
             }
         }
 
+
+        public static string GetStackCards(string cardowner)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = "SELECT cardname FROM cards WHERE cardowner = '" + cardowner + "' AND cardstatus = 0 ORDER BY cardname";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                var reader = cmd.ExecuteReader();
+                string cardlist = "";
+                while (reader.Read())
+                {
+                    cardlist += reader.GetString(0);
+                    cardlist += "\n";
+                }
+                if (cardlist == "")
+                {
+                    con.Close();
+                    return "No Cards in Stack";
+
+                }
+                con.Close();
+                return cardlist;
+            }
+        }
+        //NOT TESTED
         public static string GetDeckCards(string cardowner)
         {
             using (NpgsqlConnection con = GetConnection())
             {
 
-                string query = "SELECT cardname FROM cards WHERE cardwoner = '" + cardowner + "' AND cardstatus = 1";
+                string query = "SELECT cardname FROM cards WHERE cardowner = '" + cardowner + "' AND cardstatus = 1 ORDER BY cardname";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 var reader = cmd.ExecuteReader();
@@ -316,6 +392,113 @@ namespace MonsterTradingCardGame1
                 }
                 con.Close();
                 return cardlist;
+            }
+        }
+
+        //NOT TESTED
+        public static string GetALLCardsForSAle()
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = "SELECT cardname,cardowner,cardprice FROM cards WHERE cardstatus = 2 ORDER BY cardprice";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                var reader = cmd.ExecuteReader();
+                string cardlist = "";
+                while (reader.Read())
+                {
+                    cardlist += reader.GetString(0);
+                    cardlist += " | ";
+                    cardlist += reader.GetString(1);
+                    cardlist += " | ";
+                    cardlist += reader.GetInt32(2);
+                    cardlist += "\n";
+                }
+                if (cardlist == "")
+                {
+                    con.Close();
+                    return "No Cards for Sale";
+
+                }
+                con.Close();
+                return cardlist;
+            }
+        }
+        //NOT TESTED
+        public static string CreateTradeDeal(string cardowner, string cardname, int price, int cardID)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = "SELECT * FROM cards WHERE cardname = '" + cardname + "' AND cardowner = '" + cardowner + "' AND cardstatus = 0 AND cardID = "+cardID+" LIMIT 1";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                var reader = cmd.ExecuteReader();
+                string newcardname = "";
+                while (reader.Read())
+                {
+                    newcardname = reader.GetString(0);
+
+                }
+                if (newcardname == "")
+                {
+
+                    return "No " + newcardname + " in your Stack";
+
+                }
+                con.Close();
+                con.Open();
+                string query1 = "UPDATE cards SET cardstatus = 2, cardprice= "+price+" WHERE cardID ='" + cardID+ "ORDER BY cardname LIMIT 1";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                int n = cmd1.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Card set for Sale");
+                    con.Close();
+                    return newcardname + " Set for Sale for "+ price +" coins";
+                }
+                return "UNKNOWN ERROR";
+                
+            }
+        }
+
+
+        //NOT IMPLEMENTED
+        public static string BuyACard(string cardowner, string cardname, int price, int cardID)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+
+                string query = "SELECT * FROM cards WHERE cardname = '" + cardname + "' AND cardowner = '" + cardowner + "' AND cardstatus = 0 AND cardID = " + cardID + " LIMIT 1";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                var reader = cmd.ExecuteReader();
+                string newcardname = "";
+                while (reader.Read())
+                {
+                    newcardname = reader.GetString(0);
+
+                }
+                if (newcardname == "")
+                {
+
+                    return "No " + newcardname + " in your Stack";
+
+                }
+                con.Close();
+                con.Open();
+                string query1 = "UPDATE cards SET cardstatus = 2, cardprice= " + price + " WHERE cardID ='" + cardID + "ORDER BY cardname LIMIT 1";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                int n = cmd1.ExecuteNonQuery();
+                if (n == 1)
+                {
+                    Console.WriteLine("Card set for Sale");
+                    con.Close();
+                    return newcardname + " Set for Sale for " + price + " coins";
+                }
+                return "UNKNOWN ERROR";
+
             }
         }
 

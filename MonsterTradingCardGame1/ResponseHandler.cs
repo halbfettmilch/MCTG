@@ -34,10 +34,6 @@ namespace MonsterTradingCardGame1
                         string password = (string)obj["Password"];
                         switch (request.http_verb)
                         {
-                            case "GET":
-
-                                load = manager.getUser(name);
-                                break;
                             case "POST":
                                 load = manager.setUser(name, password);
 
@@ -84,7 +80,16 @@ namespace MonsterTradingCardGame1
                    
                     case "cards":
                         string[] arrbuffer3 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
-                        load = manager.showUsercards(arrbuffer3[1]);
+                        load = manager.ShowAllCards(arrbuffer3[1]);
+                        break;
+                    case "deck":
+                        switch (request.http_verb)
+                        {
+                            case "GET":
+                                string[] arrbuffer4 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.ShowDeckCards(arrbuffer4[1]);
+                                break;
+                        }
                         break;
 
 

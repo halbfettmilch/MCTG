@@ -37,12 +37,7 @@ curl -X POST http://localhost:8000/sessions --header "Content-Type: application/
 echo.
 echo.
 
-Open Package
-REM ----------------
-echo 3) Open packages
-curl -X POST http://localhost:8000/packages --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d ""
-echo.	
-																																																																															 				    
+																																																																														 				    
 
 
 echo 4) acquire packages kienboec
@@ -90,14 +85,14 @@ echo.
 echo.
 
 echo 8) show all acquired cards altenhof
-curl -X GET http://localhost:10001/cards --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
+curl -X GET http://localhost:8000/cards --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.
 
 echo 10) show unconfigured deck
-curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
+curl -X GET http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
-curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
+curl -X GET http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.
 

@@ -137,18 +137,35 @@ namespace MonsterTradingCardGame1
         {
             string response = "";
             Package package = createPackage();
-            for (int i = 0; i < package.size; i++)
-            {
-                response += DatabaseService.OpenPackage(package.package[i]._Name, username);
-            }
+            
+                response += DatabaseService.OpenPackage(username, package);
+           
             return response;
         }
 
-       
+        public string ShowAllCards(string username)
+        {
+            return DatabaseService.GetAllCards(username);
+        }
 
-        public string showUsercards(string username)
+        public string ShowUsercards(string username)
         {
             return DatabaseService.GetStackCards(username);
+        }
+
+        public string ShowDeckCards(string username)
+        {
+            return DatabaseService.GetDeckCards(username);
+        }
+
+        public string MoveCardToDeck(string cardname, string cardowner)
+        {
+            return DatabaseService.MoveCardToDeck(cardname, cardowner);
+        }
+
+        public string MoveCardToStack(string cardname, string cardowner)
+        {
+            return DatabaseService.MoveCardToStack(cardname, cardowner);
         }
     }
 
