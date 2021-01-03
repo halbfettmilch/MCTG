@@ -24,6 +24,7 @@ namespace MonsterTradingCardGame1
             string mime = "text/html";
             string load = "";
 
+
             if ((arr.Length == 2 || arr.Length == 3))
             {
                 switch (arr[1])
@@ -74,6 +75,13 @@ namespace MonsterTradingCardGame1
                                 string[] arrbuffer1 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                                 load = manager.acuirePackage(arrbuffer1[1]);
                                 break;
+                           
+                            case "card":
+                                string[] arrbuffer2 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                JObject obj2 = JObject.Parse(request.json);
+                                int cardid = (int)obj2["Id"];
+                                load = manager.BuyCard(arrbuffer2[1],cardid);
+                                break;
                         }
                         break;
 
@@ -88,6 +96,32 @@ namespace MonsterTradingCardGame1
                             case "GET":
                                 string[] arrbuffer4 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                                 load = manager.ShowDeckCards(arrbuffer4[1]);
+                                break;
+                        }
+                        break;
+                    case "stack":
+                        switch (request.http_verb)
+                        {
+                            case "GET":
+                                string[] arrbuffer4 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.ShowUserStackcards(arrbuffer4[1]);
+                                break;
+                        }
+                        break;
+
+                    case "tradings":
+                        switch (request.http_verb)
+                        {
+                            case "GET":
+                                string[] arrbuffer5 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.ShowAllTradings();
+                                break;
+                            case "POST":
+                                JObject obj2 = JObject.Parse(request.json);
+                                int cardid = (int)obj2["Id"];
+                                int cardprice = (int)obj2["price"];
+                                string[] arrbuffer6 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.PutCardToTrade(arrbuffer6[1],cardid,cardprice);
                                 break;
                         }
                         break;

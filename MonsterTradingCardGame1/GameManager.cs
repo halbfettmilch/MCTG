@@ -148,7 +148,7 @@ namespace MonsterTradingCardGame1
             return DatabaseService.GetAllCards(username);
         }
 
-        public string ShowUsercards(string username)
+        public string ShowUserStackcards(string username)
         {
             return DatabaseService.GetStackCards(username);
         }
@@ -167,6 +167,23 @@ namespace MonsterTradingCardGame1
         {
             return DatabaseService.MoveCardToStack(cardname, cardowner);
         }
+
+        public string ShowAllTradings()
+        {
+            return DatabaseService.ShowALLCardsForSAle();
+        }
+
+        public string PutCardToTrade(string cardowner, int cardID, int price)
+        {
+            return DatabaseService.CreateTradeDeal(cardowner, price, cardID);
+        }
+
+        public string BuyCard(string newcardowner, int cardID)
+        {
+            return DatabaseService.BuyACard(newcardowner,cardID);
+        }
+
+
     }
 
 

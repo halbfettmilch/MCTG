@@ -15,8 +15,7 @@ CREATE TABLE IF NOT EXISTS cards(
 cardname TEXT,
 cardowner TEXT,
 cardstatus int,
-cardID int
+cardID int,
+cardprice int
 );
-
-
 
