@@ -61,13 +61,6 @@ curl -X POST http://localhost:8000/transactions/packages --header "Content-Type:
 echo.
 curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
 echo.
-echo should fail (no package):
-curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
-echo.
-echo.
-
-
-echo 6) acquire newly created packages altenhof
 curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
 echo.
 curl -X POST http://localhost:8000/transactions/packages --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d ""
@@ -77,50 +70,53 @@ curl -X POST http://localhost:8000/transactions/packages --header "Content-Type:
 echo.
 echo.
 
-echo 7) show all acquired cards kienboec
+echo 6) show all acquired cards kienboec
 curl -X GET http://localhost:8000/cards --header "Authorization: Basic kienboec-mtcgToken"
 echo should fail (no token)
 curl -X GET http://localhost:8000/cards 
 echo.
 echo.
 
-echo 8) show all acquired cards altenhof
+echo 7) show all acquired cards altenhof
 curl -X GET http://localhost:8000/cards --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.
 
-echo 10) show cards in stack
+echo 8) show cards in stack
 curl -X GET http://localhost:8000/stack --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
 curl -X GET http://localhost:8000/stack --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.
 
-echo 11) configure deck
-curl -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "[\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"171f6076-4eb5-4a7d-b3f2-2d650cc3d237\"]"
+echo 9) add cards to deck -- (Caution Cards are made randomly please check first if card was acuired or use SQL Testing-Insert Script for predefined outcome)
+curl -X PUT http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"6369156\"}"
 echo.
-curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
+curl -X GET http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
-curl -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "[\"aa9999a0-734c-49c6-8f4a-651864b14e62\", \"d6e9c720-9b5a-40c7-a6b2-bc34752e3463\", \"d60e23cf-2238-4d49-844f-c7589ee5342e\", \"02a9c76e-b17d-427f-9240-2dd49b0d3bfd\"]"
+curl -X PUT http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"GoblinKing\"}"
 echo.
-curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-echo.
-echo.
-echo should fail and show original from before:
-curl -X PUT http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "[\"845f0dc7-37d0-426e-994e-43fc3ac83c08\", \"99f8f8dc-e25e-4a95-aa2c-782823f36e2a\", \"e85e3976-7c86-4d06-9a80-641c2019a79f\", \"171f6076-4eb5-4a7d-b3f2-2d650cc3d237\"]"
-echo.
-curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
+curl -X GET http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
 echo.
 
-echo 12) show cards in deck
+echo 8) Delete card from Deck
+curl -X DELETE http://localhost:8000/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"6369156\"}"
+echo.
+
+echo 11) show cards in deck
 curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
 curl -X GET http://localhost:10001/deck --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
 echo.
 echo.
 
-echo 13) show configured deck different representation
+
+-----------------------------------------------------FUNCTIONIERT BIS HIER
+
+
+
+echo 12) show configured deck different representation
 echo kienboec
 curl -X GET http://localhost:10001/deck?format=plain --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
@@ -195,47 +191,28 @@ echo 20) scoreboard
 curl -X GET http://localhost:10001/score --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
 echo.
-
-echo 21) trade
+---------------------------------------FUNKTIONIERT AB HIER 
+echo 21) show all trading deals
 echo check trading deals
 curl -X GET http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
 echo.
-echo create trading deal
-curl -X POST http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"1117111\", \"price\":\"5\"}"
-echo.
-echo check trading deals
-curl -X GET http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-echo.
-curl -X GET http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-echo.
-echo delete trading deals
-curl -X DELETE http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-echo.
 echo.
 
-echo check trading deals
-curl -X GET http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-echo.
-curl -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\": \"6cd85277-4590-49d4-b0cf-ba0a921faad0\", \"CardToTrade\": \"1cb6ab86-bdb2-47e5-b6e4-68c5ab389334\", \"Type\": \"monster\", \"MinimumDamage\": 15}"
-echo check trading deals
-curl -X GET http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-echo.
-curl -X GET http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
-echo.
-echo try to trade with yourself (should fail)
-curl -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "\"4ec8b269-0dfa-4f97-809a-2c63fe2a0025\""
-echo.
-echo try to trade 
-echo.
-curl -X POST http://localhost:10001/tradings/6cd85277-4590-49d4-b0cf-ba0a921faad0 --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "\"951e886a-0fbf-425d-8df5-af2ee4830d85\""
-echo.
-curl -X GET http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-echo.
-curl -X GET http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
+echo 22) show trading deals of specific user
+curl -X GET http://localhost:8000/tradings/kienboec --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
+
+echo 22) create trading deal
+curl -X POST http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"6369156\", \"price\":\"5\"}"
 echo.
 
-echo trade card
-curl -X POST http://localhost:8000/transactions/card --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "{\"Id\":\"1117111\"}"
+echo 23)delete trading deals
+curl -X DELETE http://localhost:8000/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"6369156\"}"
+echo.
+
+echo 24) buy a card
+curl -X POST http://localhost:8000/transactions/card --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "{\"Id\":\"6369156\"}"
+echo.
+
 
 echo end...
 

@@ -97,6 +97,18 @@ namespace MonsterTradingCardGame1
                                 string[] arrbuffer4 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                                 load = manager.ShowDeckCards(arrbuffer4[1]);
                                 break;
+                            case "PUT":
+                                JObject obj3 = JObject.Parse(request.json);
+                                int cardID1 = (int)obj3["Id"];
+                                string[] arrbuffer5 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.MoveCardToDeck(cardID1,arrbuffer5[1]);
+                                break;
+                            case "DELETE":
+                                JObject obj2 = JObject.Parse(request.json);
+                                int cardID2 = (int)obj2["Id"];
+                                string[] arrbuffer6 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.MoveCardToStack(cardID2,arrbuffer6[1]);
+                                break;
                         }
                         break;
                     case "stack":
@@ -114,7 +126,13 @@ namespace MonsterTradingCardGame1
                         {
                             case "GET":
                                 string[] arrbuffer5 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
-                                load = manager.ShowAllTradings();
+                                if (arr.Length==2)
+                                {
+                                    load = manager.ShowAllTradings();
+
+                                }
+                                else load = manager.ShowTradesForUser(arr[2]);
+                                
                                 break;
                             case "POST":
                                 JObject obj2 = JObject.Parse(request.json);
@@ -122,6 +140,12 @@ namespace MonsterTradingCardGame1
                                 int cardprice = (int)obj2["price"];
                                 string[] arrbuffer6 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                                 load = manager.PutCardToTrade(arrbuffer6[1],cardid,cardprice);
+                                break;
+                            case "DELETE":
+                                JObject obj3 = JObject.Parse(request.json);
+                                int cardid1 = (int)obj3["Id"];
+                                string[] arrbuffer7 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.DeleteTradeDeal(arrbuffer7[1], cardid1);
                                 break;
                         }
                         break;

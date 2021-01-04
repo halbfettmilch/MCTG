@@ -158,14 +158,14 @@ namespace MonsterTradingCardGame1
             return DatabaseService.GetDeckCards(username);
         }
 
-        public string MoveCardToDeck(string cardname, string cardowner)
+        public string MoveCardToDeck(int cardID, string cardowner)
         {
-            return DatabaseService.MoveCardToDeck(cardname, cardowner);
+            return DatabaseService.MoveCardToDeck(cardID, cardowner);
         }
 
-        public string MoveCardToStack(string cardname, string cardowner)
+        public string MoveCardToStack(int cardID, string cardowner)
         {
-            return DatabaseService.MoveCardToStack(cardname, cardowner);
+            return DatabaseService.MoveCardToStack(cardID, cardowner);
         }
 
         public string ShowAllTradings()
@@ -173,9 +173,19 @@ namespace MonsterTradingCardGame1
             return DatabaseService.ShowALLCardsForSAle();
         }
 
+        public string ShowTradesForUser(string username)
+        {
+            return DatabaseService.ShowALLCardsForSAleForUSer(username);
+        }
+
         public string PutCardToTrade(string cardowner, int cardID, int price)
         {
             return DatabaseService.CreateTradeDeal(cardowner, price, cardID);
+        }
+
+        public string DeleteTradeDeal(string cardowner, int cardID)
+        {
+            return DatabaseService.DeleteTradeDeal(cardowner, cardID);
         }
 
         public string BuyCard(string newcardowner, int cardID)
