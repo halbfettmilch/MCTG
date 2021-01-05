@@ -8,8 +8,15 @@ CREATE Table IF NOT EXISTS users(
 username TEXT,
 userpassword TEXT,
 userstatus INT,
-coins int
+coins int,
+userbio TEXT,
+userimage TEXT,
+gamesplayed INT,
+wins INT,
+losses INT
 );
+
+
 
 CREATE TABLE IF NOT EXISTS cards(
 cardname TEXT,
@@ -18,4 +25,5 @@ cardstatus int,
 cardID int,
 cardprice int
 );
+
 

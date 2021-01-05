@@ -10,10 +10,6 @@ namespace MonsterTradingCardGame1
     {
         private static GameManager single_instance = null;
 
-        private List<User> users = new List<User>();
-
-        private List<User> loggedIn = new List<User>();
-
         private List<Card> cardlist = new List<Card>();
 
         public static GameManager getInstance()
@@ -31,12 +27,6 @@ namespace MonsterTradingCardGame1
             single_instance.cardlist.Add(new WizzardNovice());
             return single_instance;
         }
-
-
-
-
-
-
         // help functions
 
         public Card returnRandomCard()
@@ -45,7 +35,6 @@ namespace MonsterTradingCardGame1
             int number = rnd.Next(0, cardlist.Count);
             Card random = cardlist[number];
             return random;
-
         }
         private Package createPackage()
         {
@@ -53,61 +42,39 @@ namespace MonsterTradingCardGame1
             for (int j = 0; j < package.size; j++)
             {
                 package.package.Add(returnRandomCard());
-                // response += j + " " + randomcard._Name +"\n";
+                
             }
-
             return package;
-
         }
-
-
 
         // Interaction with Database
-        public string getUser(string username)
-        {
-            try
-            {
-
-
-                for (int i = 0; i < users.Count; i++)
-                {
-                    if ((users[i].Username == username))
-                    {
-                        Console.WriteLine("USER found:  {0}", users[i].Username);
-
-                        return "User found: " + users[i].Username;
-
-                    }
-                }
-                throw new Exception("ERROR; USER NOT FOUND");
-
-            }
-            catch (Exception exc)
-            {
-                Console.WriteLine("{0}", exc);
-                return "User not found";
-            }
-
-
-
-        }
+       
         public string setUser(string username, string password)
         {
-
             return DatabaseService.InsertUser(username, password);
-
-
-
         }
 
         public string deleteUser(string username)
         {
-
             return DatabaseService.DeleteUser(username);
-
-
         }
 
+        public string GetUser(string username)
+        {
+            return DatabaseService.GetUser(username);
+        }
+         public string UpdateUser(string username, string userbio, string userimage)
+        {
+            return DatabaseService.UpdateUser(username,userbio,userimage);
+        }
+        public string GetUserStats(string username)
+        {
+            return DatabaseService.GetUserStats(username);
+        }
+        public string GetScoreboard()
+        {
+            return DatabaseService.GetScoreboard();
+        }
         public string login(string username, string password)
         {
             return DatabaseService.LogInUser(username, password);
@@ -117,30 +84,10 @@ namespace MonsterTradingCardGame1
             return DatabaseService.LogOutUser(username, password);
         }
 
-        //Card battle logic
-        public string battleLogic(Card card1, Card card2)
-        {
-            if (card1.cardBattle(card2) > card2.cardBattle(card1))
-            {
-                return "The card " + card1._Name + "of player 1 won";
-            }
-            else if (card1.cardBattle(card2) < card2.cardBattle(card1))
-            {
-                return "The card " + card2._Name + "of player 2 won";
-            }
-
-            return "The cards were of Equal Power";
-        }
-
-
         public string acuirePackage(string username)
         {
-            string response = "";
             Package package = createPackage();
-            
-                response += DatabaseService.OpenPackage(username, package);
-           
-            return response;
+            return DatabaseService.OpenPackage(username, package);
         }
 
         public string ShowAllCards(string username)
@@ -193,6 +140,20 @@ namespace MonsterTradingCardGame1
             return DatabaseService.BuyACard(newcardowner,cardID);
         }
 
+        //Card battle logic
+        public string battleLogic(Card card1, Card card2)
+        {
+            if (card1.cardBattle(card2) > card2.cardBattle(card1))
+            {
+                return "The card " + card1._Name + "of player 1 won";
+            }
+            else if (card1.cardBattle(card2) < card2.cardBattle(card1))
+            {
+                return "The card " + card2._Name + "of player 2 won";
+            }
+
+            return "The cards were of Equal Power";
+        }
 
     }
 

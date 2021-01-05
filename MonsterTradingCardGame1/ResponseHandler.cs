@@ -30,20 +30,29 @@ namespace MonsterTradingCardGame1
                 switch (arr[1])
                 {
                     case "users":
-                        JObject obj = JObject.Parse(request.json);
-                        string name = (string)obj["Username"];
-                        string password = (string)obj["Password"];
+                        
                         switch (request.http_verb)
                         {
                             case "POST":
+                                JObject obj = JObject.Parse(request.json);
+                                string name = (string)obj["Username"];
+                                string password = (string)obj["Password"];
                                 load = manager.setUser(name, password);
 
                                 break;
                             case "DELETE":
-                                load = manager.deleteUser(name);
+                                load = manager.deleteUser(arr[2]);
+                                break;
+                            case "GET":
+                                load = manager.GetUser(arr[2]);
+                                break;
+                            case "PUT":
+                                JObject obj6 = JObject.Parse(request.json);
+                                string userbio = (string)obj6["userbio"];
+                                string userimage=(string)obj6["userimage"];
+                                load = manager.UpdateUser(arr[2],userbio,userimage );
 
                                 break;
-
                             default:
                                 Console.WriteLine("ERROR1");
                                 break;
@@ -66,7 +75,6 @@ namespace MonsterTradingCardGame1
                                 Console.WriteLine("ERROR2");
                                 break;
                         }
-
                         break;
                     case "transactions":
                         switch (arr[2])
@@ -84,8 +92,13 @@ namespace MonsterTradingCardGame1
                                 break;
                         }
                         break;
-
-                   
+                    case "stats":
+                        string[] arrbuffer8 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                        load = manager.GetUserStats(arrbuffer8[1]);
+                        break;
+                    case "score":
+                        load = manager.GetScoreboard();
+                        break;
                     case "cards":
                         string[] arrbuffer3 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                         load = manager.ShowAllCards(arrbuffer3[1]);
@@ -120,7 +133,6 @@ namespace MonsterTradingCardGame1
                                 break;
                         }
                         break;
-
                     case "tradings":
                         switch (request.http_verb)
                         {
@@ -132,7 +144,6 @@ namespace MonsterTradingCardGame1
 
                                 }
                                 else load = manager.ShowTradesForUser(arr[2]);
-                                
                                 break;
                             case "POST":
                                 JObject obj2 = JObject.Parse(request.json);
@@ -149,8 +160,6 @@ namespace MonsterTradingCardGame1
                                 break;
                         }
                         break;
-
-
                     default:
                         Console.WriteLine("ERROR3");
                         break;

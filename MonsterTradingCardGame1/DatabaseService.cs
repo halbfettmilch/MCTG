@@ -23,8 +23,6 @@ namespace MonsterTradingCardGame1
                 con.Close();
             }
         }
-
-
         public static string LogInUser(string username, string password)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -110,8 +108,6 @@ namespace MonsterTradingCardGame1
         public static string InsertUser(string username, string password)
         {
 
-
-
             using (NpgsqlConnection con = GetConnection())
             {
                 string query1 = "SELECT * FROM users WHERE username = '" + username + "'";
@@ -129,7 +125,7 @@ namespace MonsterTradingCardGame1
                 {
                     return "Username already exists";
                 }
-                string query = @"insert into public.Users(username,userpassword,userstatus,coins)values('" + username + "','" + password + "',0,20)";
+                string query = @"insert into public.Users(username,userpassword,userstatus,coins,userbio,userimage,gamesplayed,wins,losses)values('" + username + "','" + password + "',0,20,'','',0,0,0)";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 int n = cmd.ExecuteNonQuery();
@@ -146,7 +142,145 @@ namespace MonsterTradingCardGame1
             }
         }
 
+        public static string UpdateUser(string username, string userbio, string userimage)
+        {
 
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query1 = "SELECT * FROM users WHERE username = '" + username + "'";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                con.Open();
+                var reader = cmd1.ExecuteReader();
+                string newusername = "";
+                while (reader.Read())
+                {
+                    newusername = reader.GetString(0);
+
+                }
+                con.Close();
+                if (newusername == "")
+                {
+                    return "No user with that name found";
+                }
+                string query = @"Update users SET userbio='"+userbio+"', userimage='"+userimage+"' WHERE username='"+username+"'";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                int n = cmd.ExecuteNonQuery();
+                if (n != -1)
+                {
+                    Console.WriteLine("User Updated");
+                    return "User updated";
+                }
+
+                Console.WriteLine("ERROR");
+                con.Close();
+                return "UNKNOWN ERROR";
+
+            }
+        }
+        public static string GetUser(string username)
+        {
+
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query1 = "SELECT username,coins,userbio,userimage FROM users WHERE username = '" + username + "'";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                con.Open();
+                var reader = cmd1.ExecuteReader();
+                string response = "username  |  coins  |  userbio  |  userimage\n";
+                string newusername = "";
+                while (reader.Read())
+                {
+                    newusername = reader.GetString(0);
+                    response += newusername;
+                    response += "  |  ";
+                    response += reader.GetInt32(1);
+                    response += "  |  ";
+                    response += reader.GetString(2);
+                    response += "  |  ";
+                    response += reader.GetString(3);
+                    response += "\n";
+
+                }
+                con.Close();
+                if (newusername=="")
+                {
+                    return "User Not found";
+                }
+                
+                return response;
+
+            }
+        }
+
+        public static string GetUserStats(string username)
+        {
+
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query1 = "SELECT username,gamesplayed,wins,losses FROM users WHERE username = '" + username + "'";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                con.Open();
+                var reader = cmd1.ExecuteReader();
+                string response = "username  |  gamesplayed  |  wins  |  losses\n";
+                string newusername = "";
+                while (reader.Read())
+                {
+                    newusername = reader.GetString(0);
+                    response += newusername;
+                    response += "  |  ";
+                    response += reader.GetInt32(1);
+                    response += "  |  ";
+                    response += reader.GetInt32(2);
+                    response += "  |  ";
+                    response += reader.GetInt32(3);
+                    response += "\n";
+
+                }
+                con.Close();
+                if (newusername == "")
+                {
+                    return "User Not found";
+                }
+
+                return response;
+
+            }
+        }
+        public static string GetScoreboard()
+        {
+
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query1 = "SELECT username,gamesplayed,wins,losses FROM users ORDER BY gamesplayed";
+                NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                con.Open();
+                var reader = cmd1.ExecuteReader();
+                string response = "username  |  gamesplayed  |  wins  |  losses\n";
+                string newusername = "";
+                while (reader.Read())
+                {
+                    newusername = reader.GetString(0);
+                    response += newusername;
+                    response += "  |  ";
+                    response += reader.GetInt32(1);
+                    response += "  |  ";
+                    response += reader.GetInt32(2);
+                    response += "  |  ";
+                    response += reader.GetInt32(3);
+                    response += "\n";
+
+                }
+                con.Close();
+                if (newusername == "")
+                {
+                    return "No Users in Database";
+                }
+
+                return response;
+
+            }
+        }
 
         public static string DeleteUser(string username)
         {
@@ -166,6 +300,10 @@ namespace MonsterTradingCardGame1
                 return "ERROR User not deleted";
             }
         }
+
+       
+
+
         public static string OpenPackage(string cardowner, Package package)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -250,6 +388,24 @@ namespace MonsterTradingCardGame1
         {
             using (NpgsqlConnection con = GetConnection())
             {
+
+                string query2 = "SELECT count(cardname) FROM cards WHERE cardowner = " + cardowner + " AND cardstatus = 1";
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
+                con.Open();
+                var reader2 = cmd2.ExecuteReader();
+                int cardsInDeck = 0;
+                while (reader2.Read())
+                {
+                    cardsInDeck = reader2.GetInt32(0);
+
+                }
+                if ( cardsInDeck == 4)
+                {
+
+                    return "Already 4 Cards in your Deck";
+
+                }
+                con.Close();
                 string query = "SELECT * FROM cards WHERE cardid = " + cardID + " AND cardstatus = 0 LIMIT 1";
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
@@ -394,8 +550,6 @@ namespace MonsterTradingCardGame1
                 return cardlist;
             }
         }
-
-        
         public static string ShowALLCardsForSAle()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -529,9 +683,6 @@ namespace MonsterTradingCardGame1
 
             }
         }
-
-
-        //coins setting may be off?
         public static string BuyACard(string newcardowner, int cardID)
         {
             using (NpgsqlConnection con = GetConnection())
@@ -618,9 +769,6 @@ namespace MonsterTradingCardGame1
 
             }
         }
-
-
-
         public static NpgsqlConnection GetConnection()
         {
             return new NpgsqlConnection(@"Server=localhost;Port=5433;User Id=postgres;Password=postgres;Database=mctg");
