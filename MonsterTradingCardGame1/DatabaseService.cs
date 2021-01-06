@@ -389,7 +389,7 @@ namespace MonsterTradingCardGame1
             using (NpgsqlConnection con = GetConnection())
             {
 
-                string query2 = "SELECT count(cardname) FROM cards WHERE cardowner = " + cardowner + " AND cardstatus = 1";
+                string query2 = "SELECT count(cardname) FROM cards WHERE cardowner = '" + cardowner + "' AND cardstatus = 1";
                 NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
                 con.Open();
                 var reader2 = cmd2.ExecuteReader();
@@ -419,7 +419,7 @@ namespace MonsterTradingCardGame1
                 if (newcardname == "")
                 {
 
-                    return "No " + newcardname + " in your stack";
+                    return "Card not found";
 
                 }
                 con.Close();
@@ -454,7 +454,7 @@ namespace MonsterTradingCardGame1
                 if (newcardname == "")
                 {
 
-                    return "No " + newcardname + " in your Deck";
+                    return "Card not found";
 
                 }
                 con.Close();
@@ -490,7 +490,7 @@ namespace MonsterTradingCardGame1
                 if (cardlist == "")
                 {
                     con.Close();
-                    return "No Cards in Stack";
+                    return "You own no Cards";
 
                 }
                 con.Close();
@@ -628,7 +628,7 @@ namespace MonsterTradingCardGame1
                 if (newcardname == "")
                 {
 
-                    return "No " + newcardname + " put for Sale";
+                    return "Card not found";
 
                 }
                 con.Close();
@@ -665,7 +665,7 @@ namespace MonsterTradingCardGame1
                 if (newcardname == "")
                 {
 
-                    return "No " + newcardname + " in your Stack";
+                    return "Card not found";
 
                 }
                 con.Close();

@@ -26,7 +26,7 @@ namespace MonsterTradingCardGame1
 
 
             List<Task> tasks = new List<Task>();
-            TcpListener listener = new TcpListener(IPAddress.Loopback, 8000);
+            TcpListener listener = new TcpListener(IPAddress.Loopback, 10001);
             listener.Start(5);
             try
             {

@@ -1,0 +1,48 @@
+MTCG-Andreas Hrasdin
+
+Einleitung.
+
+Für dieses Project habe ich mich an die Vorgabe der Datei:"MonsterTradingCards_exercise.pdf" gehalten einige änderungen wurden jedoch gemacht.
+Diese Sollten kommentiert sein und hoffentlich auch begründet.
+
+?.?-Curl scripts
+1-unverändert
+2-unverändert
+3-Da die Karten vom Server per Zufall erstellt werden und in ein Package geladen werden wurde dieses Curl durch: Logout User ersetzt
+4-unverändert
+5-unerändert
+6- Es müssen keine neuen Packages erstellt werden da diese bei Bedarf erstellt werden
+7-unverändert
+8-unverändert
+9-unverändert
+10- unverändert, war gemeint zeige alle Karten, welche sich nicht im Deck befinden? 
+11- 2 Wichtige Änderungen:
+	1. Die Karten IDs wurden durch Zufall erstellt und müssen davor erst ausgelesen oder von einem JSON String retourniert werden.
+	2. Es wird eine einzelne Karte dem Deck übergeben. Orientiert habe ich mich dabei ein bisschen an dem Spiel Battleforge solltet Ihr (majestätsplural) das Kennen. 
+	Dabei wurde mit einem Links Klick eine Karte in das Deck verschoben und mit einem Rechtsklick diese wieder entfernt. Durch dieses schnelle Einfügen und Entfernen wurde ein JSON-string die mehrere Karten sendet obsolet.
+11.5- Delete-Card-Curl, um diese wieder aus dem Deck zu entfernen.
+12-unverändert
+13-nicht implementiert
+14-unverändert
+15-unverändert
+16-unverändert
+17..
+18-unverändert
+19-unverändert
+20-Hier habe ich mich bewusst für das Alternative Design eines Auktionshauses entschieden. Es wird eine CardID und ein price gesendet. 
+Diese Karte wird dann in das Auktionshaus geschoben und kann von anderen Nutzern erworben werden. Für das Trading per tausch habe ich einfach viel zu viele Balancing Probleme und exploits im Kopf gehabt. 
+Eine Karte "Goblinbombe“ mit 5 Stärke und extra "du verlierst das Spiel nächste Runde“ wäre gleichwertig mit einer Karte "Platinengel“, mit 5 stärke und "du kannst das Spiel nicht verlieren“. 
+Außerdem entsteht mit dem Auktionshaus die Möglichkeit verschiedene Kurse für Karten zu haben, diese können demnach an wert verlieren oder gewinnen und dieses Prinzip fasziniert mich sehr.
+21-unverändert
+
+Zusätzliche Curls: 
+
+22- show trading deals for specific user: Zeigt alle Karten die von einem bestimmten User angeboten werden.
+23-Delete Trading Deal : entfernt eine Karte aus dem Auktionshaus
+24- Buy a Card: User kauft eine andere Karte für Geld.
+
+
+
+
+
+
