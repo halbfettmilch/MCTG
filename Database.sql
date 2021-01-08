@@ -1,11 +1,11 @@
-DROP TABLE users;
-DROP TABLE cards;
+DROP TABLE users CASCADE;
+DROP TABLE cards CASCADE;
 
 --Creating Tables
 
 
 CREATE Table IF NOT EXISTS users(
-username TEXT,
+username TEXT PRIMARY KEY,
 userpassword TEXT,
 userstatus INT,
 coins int,
@@ -22,13 +22,18 @@ CREATE TABLE IF NOT EXISTS cards(
 cardname TEXT,
 cardowner TEXT,
 cardstatus int,
-cardID int,
+cardID int PRIMARY KEY,
 cardprice int
 );
 
-ALTER TABLE "users" ADD PRIMARY KEY ("username");
 
-ALTER TABLE "cards" ADD PRIMARY KEY ("cardid");
+
+--insert for curl scripts (so cardowner is not NULL)
+insert into users(username,userpassword,userstatus,coins,userbio,userimage,gamesplayed,wins,losses)values('kienboec','daniel',0,20,'','',0,0,0);
+
+
+ALTER TABLE cards ADD FOREIGN KEY ("cardowner")
+REFERENCES users ("username") ON DELETE CASCADE;
 
 
 

@@ -16,7 +16,7 @@ namespace MonsterTradingCardGame1
         }
 
         public void response(RequestContext request, GameManager manager)
-        {   // gets the sent parameter and depending on that manipulates our Database
+        {
             string[] arr = request.requested.Split("/");
             string VERSION = request.http_version;
             string NAME = "AndreasServer";
@@ -172,11 +172,12 @@ namespace MonsterTradingCardGame1
                                 JObject obj2 = JObject.Parse(request.json);
                                 int cardID2 = (int)obj2["Id"];
                                 string[] arrbuffer6 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                                load = manager.MoveCardToStack(cardID2, arrbuffer6[1]);
                                 if (load != "Card not found" && load != "UNKNOWN ERROR" && load != "")
                                 {
                                     status = "200";
                                 }
-                                load = manager.MoveCardToStack(cardID2,arrbuffer6[1]);
+                                
                                 break;
                         }
                         break;

@@ -10,7 +10,7 @@ namespace MonsterTradingCardGame1
     {
         private static GameManager single_instance = null;
 
-        private List<Card> cardlist = new List<Card>();
+        public List<Card> cardlist = new List<Card>();
 
         public static GameManager getInstance()
         {
@@ -29,11 +29,11 @@ namespace MonsterTradingCardGame1
         }
         // help functions
 
-        public Card returnRandomCard()
+        public Card returnRandomCard(List<Card> cardlistbuffer)
         {
             Random rnd = new Random();
-            int number = rnd.Next(0, cardlist.Count);
-            Card random = cardlist[number];
+            int number = rnd.Next(0, cardlistbuffer.Count);
+            Card random = cardlistbuffer[number];
             return random;
         }
         private Package createPackage()
@@ -41,7 +41,7 @@ namespace MonsterTradingCardGame1
             Package package = new Package();
             for (int j = 0; j < package.size; j++)
             {
-                package.package.Add(returnRandomCard());
+                package.package.Add(returnRandomCard(cardlist));
                 
             }
             return package;
@@ -140,20 +140,15 @@ namespace MonsterTradingCardGame1
             return DatabaseService.BuyACard(newcardowner,cardID);
         }
 
-        //Card battle logic
-        public string battleLogic(Card card1, Card card2)
-        {
-            if (card1.cardBattle(card2) > card2.cardBattle(card1))
-            {
-                return "The card " + card1._Name + "of player 1 won";
-            }
-            else if (card1.cardBattle(card2) < card2.cardBattle(card1))
-            {
-                return "The card " + card2._Name + "of player 2 won";
-            }
+        //Battle
 
-            return "The cards were of Equal Power";
+        public string Battle(string username)
+        {
+            return DatabaseService.SearchForBattle(username);
         }
+
+
+
 
     }
 

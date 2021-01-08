@@ -1,19 +1,19 @@
 {
 	"info": {
-		"_postman_id": "5494a886-e85c-4f9b-b7a2-6a1c5466a992",
+		"_postman_id": "4604da2e-4175-4e0d-92de-007c6a40916b",
 		"name": "Curls",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Create User Daniel",
+			"name": "Create User Daniel FAIL",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"pm.test(\"Status test\", function () {",
-							"    pm.response.to.have.status(201);",
+							"    pm.response.to.have.status(400);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1097,6 +1097,53 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Status test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Basic kienboec-mtcgToken"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"Id\":\"1\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:10001/deck",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10001",
+					"path": [
+						"deck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Card from Deck Daniel FAIL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {",
 							"    pm.response.to.have.status(400);",
 							"});"
 						],
@@ -1240,7 +1287,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Name\": \"Kienboeck\",  \"Bio\": \"me playin...\", \"Image\": \":-)\"}",
+					"raw": "{\"userbioio\": \"me playin...\", \"userimage\": \":-)\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1288,7 +1335,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"Name\": \"Altenhofer\", \"Bio\": \"me codin...\",  \"Image\": \":-D\"}",
+					"raw": "{\"userbio\": \"me codin...\",  \"userimage\": \":-D\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1427,7 +1474,7 @@
 			"response": []
 		},
 		{
-			"name": "User Stats Markus",
+			"name": "User Stats Markus NO cards",
 			"event": [
 				{
 					"listen": "test",
@@ -1617,7 +1664,7 @@
 			"response": []
 		},
 		{
-			"name": "Marktplace",
+			"name": "Marktplace NO CARDS",
 			"event": [
 				{
 					"listen": "test",

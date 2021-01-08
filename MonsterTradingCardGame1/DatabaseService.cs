@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using Npgsql;
@@ -151,18 +152,21 @@ namespace MonsterTradingCardGame1
                 NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
                 con.Open();
                 var reader = cmd1.ExecuteReader();
-                string newusername = "";
+                string newusername ="";
                 while (reader.Read())
                 {
                     newusername = reader.GetString(0);
 
                 }
                 con.Close();
-                if (newusername == "")
+                if (newusername =="")
                 {
                     return "No user with that name found";
                 }
                 string query = @"Update users SET userbio='"+userbio+"', userimage='"+userimage+"' WHERE username='"+username+"'";
+                Console.WriteLine(newusername);
+                Console.WriteLine(userbio);
+                Console.WriteLine(userimage);
                 NpgsqlCommand cmd = new NpgsqlCommand(query, con);
                 con.Open();
                 int n = cmd.ExecuteNonQuery();
@@ -769,6 +773,116 @@ namespace MonsterTradingCardGame1
 
             }
         }
+        public static string SearchForBattle(string username)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query3 = "SELECT cardname FROM cards WHERE cardstatus = 1 AND cardowner='" + username + "'";
+                NpgsqlCommand cmd3 = new NpgsqlCommand(query3, con);
+                con.Open();
+                var reader3 = cmd3.ExecuteReader();
+                string[] cardsP1 = new string[4];
+                int j = 0;
+                while (reader3.Read())
+                {
+                    cardsP1[j] = reader3.GetString(0);
+                    j++;
+
+                }
+                if (j != 4)
+                {
+                    con.Close();
+                    return "You have no valid Deck";
+                }
+                con.Close();
+                string query = "SELECT username FROM users WHERE userstatus = 2";
+                NpgsqlCommand cmd = new NpgsqlCommand(query, con);
+                con.Open();
+                var reader = cmd.ExecuteReader();
+                string newusername = "";
+                while (reader.Read())
+                {
+                    newusername = reader.GetString(0);
+
+                }
+                if (newusername == "")
+                {
+                    con.Open();
+                    string query1 = "UPDATE users SET userstatus = 2, WHERE username ='" + username + "'";
+                    NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                    int n = cmd1.ExecuteNonQuery();
+                    if (n == 1)
+                    {
+                        con.Close();
+                        return "Waiting for Battle";
+                    }
+
+                }
+                con.Close();
+                string query2 = "SELECT cardname FROM cards WHERE cardstatus = 1 AND cardowner='"+newusername+"'";
+                NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
+                con.Open();
+                var reader2 = cmd.ExecuteReader();
+                string[] cardsP2 = new string[4];
+                int i = 0;
+                while (reader2.Read())
+                {
+                    cardsP2[i] = reader.GetString(0);
+                    i++;
+
+                }
+                if (i != 4)
+                {
+                    con.Close();
+                    return "Enemy has no valid Deck";
+                }
+                con.Close();
+                //start Battle
+                BattleLogic battlebuffer= new BattleLogic();
+                string winner = battlebuffer.battle(username,newusername,cardsP1,cardsP2);
+                var lastLine = winner.Split('\n').Last();
+                if (lastLine == "|||" + username + " won|||")
+                {
+                    con.Open();
+                    string query1 = "UPDATE users SET wins = wins+1,gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + username + "';UPDATE users SET losses = losses+1,gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + newusername + "'";
+                    NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                    int n = cmd1.ExecuteNonQuery();
+                    if (n == 2)
+                    {
+                        con.Close();
+                        return "winner";
+                    }
+                }
+                else if (lastLine == "|||" + newusername + " won|||")
+                {
+                    con.Open();
+                    string query1 = "UPDATE users SET wins = wins+1,gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + newusername + "';UPDATE users SET losses = losses+1,gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + username + "'";
+                    NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                    int n = cmd1.ExecuteNonQuery();
+                    if (n == 2)
+                    {
+                        con.Close();
+                        return "winner";
+                    }
+                }
+                else if (lastLine == "|||The Game ENDED After 100 Rounds|||")
+                {
+                    con.Open();
+                    string query1 = "UPDATE users SET gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + newusername + "';UPDATE users SET gamesplayed=gamesplayed+1,userstatus=1 WHERE username ='" + username + "'";
+                    NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
+                    int n = cmd1.ExecuteNonQuery();
+                    if (n == 2)
+                    {
+                        con.Close();
+                        return "winner";
+                    }
+                }
+                con.Close();
+                return "UNKNOWN ERROR";
+
+            }
+        }
+       
         public static NpgsqlConnection GetConnection()
         {
             return new NpgsqlConnection(@"Server=localhost;Port=5433;User Id=postgres;Password=postgres;Database=mctg");
