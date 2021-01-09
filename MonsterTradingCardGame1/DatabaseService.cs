@@ -787,12 +787,12 @@ namespace MonsterTradingCardGame1
                 {
                     cardsP1[j] = reader3.GetString(0);
                     j++;
-
+                   
                 }
-                if (j != 4)
+                if (cardsP1.Length != 4)
                 {
                     con.Close();
-                    return "You have no valid Deck";
+                    return "You has no valid Deck";
                 }
                 con.Close();
                 string query = "SELECT username FROM users WHERE userstatus = 2";
@@ -805,10 +805,16 @@ namespace MonsterTradingCardGame1
                     newusername = reader.GetString(0);
 
                 }
+                con.Close();
+                if (newusername == username)
+                {
+                    return "Already searching for battle";
+                }
+
                 if (newusername == "")
                 {
                     con.Open();
-                    string query1 = "UPDATE users SET userstatus = 2, WHERE username ='" + username + "'";
+                    string query1 = "UPDATE users SET userstatus = 2 WHERE username ='" + username + "'";
                     NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
                     int n = cmd1.ExecuteNonQuery();
                     if (n == 1)
@@ -818,20 +824,20 @@ namespace MonsterTradingCardGame1
                     }
 
                 }
-                con.Close();
                 string query2 = "SELECT cardname FROM cards WHERE cardstatus = 1 AND cardowner='"+newusername+"'";
                 NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
                 con.Open();
-                var reader2 = cmd.ExecuteReader();
+                var reader2 = cmd2.ExecuteReader();
                 string[] cardsP2 = new string[4];
                 int i = 0;
                 while (reader2.Read())
                 {
-                    cardsP2[i] = reader.GetString(0);
+                    cardsP2[i] = reader2.GetString(0);
                     i++;
+                    
 
                 }
-                if (i != 4)
+                if (cardsP2.Length!=4)
                 {
                     con.Close();
                     return "Enemy has no valid Deck";
@@ -850,7 +856,7 @@ namespace MonsterTradingCardGame1
                     if (n == 2)
                     {
                         con.Close();
-                        return "winner";
+                        return winner;
                     }
                 }
                 else if (lastLine == "|||" + newusername + " won|||")
@@ -862,7 +868,7 @@ namespace MonsterTradingCardGame1
                     if (n == 2)
                     {
                         con.Close();
-                        return "winner";
+                        return winner;
                     }
                 }
                 else if (lastLine == "|||The Game ENDED After 100 Rounds|||")
@@ -874,7 +880,7 @@ namespace MonsterTradingCardGame1
                     if (n == 2)
                     {
                         con.Close();
-                        return "winner";
+                        return winner;
                     }
                 }
                 con.Close();

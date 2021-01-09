@@ -163,7 +163,7 @@ namespace MonsterTradingCardGame1
                                 int cardID1 = (int)obj3["Id"];
                                 string[] arrbuffer5 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
                                 load = manager.MoveCardToDeck(cardID1,arrbuffer5[1]);
-                                if (load != "Card not found" && load!= "UNKNOWN ERROR" && load != "")
+                                if (load != "Card not found" && load!= "UNKNOWN ERROR" && load != "" && load!= "Already 4 Cards in your Deck")
                                 {
                                     status = "200";
                                 }
@@ -192,6 +192,14 @@ namespace MonsterTradingCardGame1
                                     status = "200";
                                 }
                                 break;
+                        }
+                        break;
+                    case "battles":
+                        string[] arrbuffer9 = request.data["Authorization:"].Split(new Char[] { ' ', '-' });
+                        load = manager.Battle(arrbuffer9[1]);
+                        if (load != "No Users in Database" && load != "")
+                        {
+                            status = "200";
                         }
                         break;
                     case "tradings":

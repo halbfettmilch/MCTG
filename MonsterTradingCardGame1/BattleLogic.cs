@@ -15,7 +15,7 @@ namespace MonsterTradingCardGame1
                 for (int i = 0; i < Gamebuffer.cardlist.Count; i++)
                 {
                     if (Gamebuffer.cardlist[i]._Name == pcards[j])
-                    {
+                    {   //Console.WriteLine(Gamebuffer.cardlist[i]._Name);
                         playerdeck.Add(Gamebuffer.cardlist[i]);
                     }
                 }
@@ -32,8 +32,8 @@ namespace MonsterTradingCardGame1
                 battleLog += "Round " + i + ":\n";
                 Card p1card = Gamebuffer.returnRandomCard(player1deck);
                 Card p2card = Gamebuffer.returnRandomCard(player2deck);
-                battleLog += "Player 1 played: " + p1card._Name + "\n";
-                battleLog += "Player 2 played: " + p1card._Name + "\n";
+                battleLog += user1+" played: " + p1card._Name + "\n";
+                battleLog += user2+" played: " + p2card._Name + "\n";
                 if (CardBattle(p1card, p2card) == 1)
                 {
                     battleLog += p1card._Name+ "Won the " + i + "st round\n -------------------------\n";
@@ -61,6 +61,7 @@ namespace MonsterTradingCardGame1
                     battleLog +="|||"+user2+" won|||";
                     return battleLog;
                 }
+                Console.WriteLine(battleLog);
 
             }
 

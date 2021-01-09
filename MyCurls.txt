@@ -201,6 +201,8 @@ echo 24) buy a card fail no coins
 curl -X POST http://localhost:10001/transactions/card --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken" -d "{\"Id\":\"1\"}"
 echo.
 
+
+--NON AUTOMATED TEST BUY CARD
 --UPDATE users set coins=20 Where username='altenhof';
 echo  create trading deal
 curl -X POST http://localhost:10001/tradings --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken" -d "{\"Id\":\"1\", \"price\":\"5\"}"
