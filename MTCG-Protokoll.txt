@@ -1,17 +1,90 @@
 MTCG-Andreas Hrasdin
 
-Einleitung.
+1.1 Einleitung und Ordnerinhalt
 
 Für dieses Project habe ich mich an die Vorgabe der Datei:"MonsterTradingCards_exercise.pdf" gehalten einige änderungen wurden jedoch gemacht.
 Diese Sollten kommentiert sein und hoffentlich auch begründet.
 
-?.?-Curl scripts
+In der abgebenen Ordnerstruktur befindet sich folgendes:
+
+-Das fertige Programm
+-MTCG-Protokoll , Dieses Protokoll
+-Database.sql, Ein SQL FIle um die Datenabnk anzulegen
+-MyCurls.txt , Die veränderte Curl Datei
+-Curls.postman_collection.json, Automatieserte Curl Tests für Postman
+-Ein git Repository
+-GitLink , Textfile mit der Github URL.
+
+2.1 Failures and Solutions
+
+Dass Design meines Projektes hat sich im laufe des Semesters fortlaufend verändert und es wurden sehr oft große Änderungen vorgenommen. Als Grund dafür würde ich die sehr ungenaue Spezifikation des Projektes 
+in Kombination mit meiner eigenen schlechten Projektplanung nennen.
+Zu mehreren Zeitpunkten während der Planung meines Projektes entschließ ich mich von bestimmten Vorgaben abzuweichen da ich sehr viel spaß bei der umsetzung meiner eigenen Ideen für dieses Kartenspiel hatte. Da mir jedoch des öfteren
+noch das nötige Wissen für eine genuere umsetzung fehlte wurden oft Sachen falsch implementiert.
+Aus der Projektspezifikation "MonsterTradingCards_exercise.pdf" sind viele Sachen leider sehr schlecht ersichtlich oder unzureichend spezifiziert. bsp. DatabaseHandling:
+Bevor mir bewusst wurde die Interaktion mit der Datenbank soll über Postgres/SQL abflaufen, legte ich eine Lokale Datenbank aus Objekten und Klassen an welche diese dann in einem File speichern und Laden sollten. Dies war nicht nur ein
+enormer Mehraufwand es war auch sehr Schade fast 800 Zeilen Code zu löschen da es zu diesem Zeitpunkt bereits eine voll funktionsfähige Lokale Datenbank war. Das Datenbank-handling über eine Postgres/SQl Datenabnk erwies sich danach 
+jedoch als wesentlich angenehmer.
+Was genau für dieses Projekt umzusetzen ist wurde für mich erst nach genauem betrachten der gewünschten Curl Anfragen ersichtlich. Diese konnten dann der Reihe nach implementiert werden. Ab diesem Zeitpunkt wurde mir erst 
+die Sinnhaftigkeit einiger Features bewusst.
+Zu guter Letzt bin ich mit dem Ergebnis meines Projektes sehr zufrieden, ich bin mir jedoch auch bewusst das es noch einige Verbessrungsmöglichkeiten gibt und manche Features möglicherweise für eine volkommen 
+korrekte implemtierung noch abgeändert werden müssten. z.B. Im Moment gebe ich nicht nur eine http-statusmeldung an den client zurück sondern auch jedes mal eine Nachricht im body um gut nachvollziehen zu können was passiert ist
+ob dies einen Sinn hat ist eine andere Frage.
+
+2.2 Architektur/Design
+
+Hier eine Übersicht über die verwendeten Klassen und deren Aufgaben:
+
+2.2.1 Program.cs
+
+Startet den Server, sodass sich clients mit diesen verbinden können und stellt eine Verbindung zu unserer Datenbank her. Multithreading ist implementiert.
+
+2.2.2 RequestContext
+
+Enthält die gesendeten Informationen vom client: http-verb,body,httpversion...
+
+2.2.3 unwrapper
+
+Nimmt die vom client gesendeten Parameter entgegen und speichert diese in Ihren entsprechnden Plätzen im RequestContext.
+
+2.2.4 ResponseHandler
+
+Bekommt den RequestContext übergeben und die Single_instance GameManager.
+Der ResponseHandler schaut dann welche Anfrage vom Client gesendet wurde und führt je nach dem eine andere Funktion im GameManager aus. Je nach der Antwort vom GameManager baut der ResponseHnder 
+dann eine entsprechende Nachricht(auch http status z.b. 200 OK)  zusammen und sendet diese an den Client zurück.
+
+2.2.5 GameManager
+
+This is were the Magic happens.Ist für die Ausführung aller wichtigen Funktionen zuständig. Zudem besitzt er eine Lokale Liste aller Karten welche sich im Spiel befinden sollen, somit können auch nur diese Gespielt werden. 
+Zudem reournieren die meisten funktionen  einen String mit dem genauen Outcome der ausgeführten Funktion.
+
+2.2.6 DatabaseHandler
+
+Ist für die Interaktion mit der Datenbank zuständig. Verändert, inserted oder Deleted Einträge je nach Aufrufung. Retourniert ebenfalls einen String an den GameManager mit dem Outcome der Operation.
+
+2.2.7 BattleLogic
+
+Enthält die Wichtigsten Funktionen für den Ablauf eines Kampfes.
+
+2.2.8 Card
+
+Dies ist eine Karte mit den Gespeicherten Attributen wie Damage, Cardname, Cardtype. Zusätzlich befindet sich in ihr eine Funktion die Ihren DMG wert retourniert. Dieser kann auch verändert sein sollte 
+Sie gegen eine Zweite Karte antreten die diesen verändert. Ich habe mich bewusst dafür entschlossen Die KArten in Klassen aufzuteilen da ich es mit bei Spielen wie Hearthstone oder Battleforge 
+nicht anders erklären kann als das deren Karten ebenfalls in Klassen definiert sind. Im bezug auf das Balancing hat es für mich  keinen Unterschied gemacht ob man die Jeweilige Klasse dafür verändern muss oder 
+in einer Riesigen Funktion die für diese Karte zuständige Zeile finden muss.
+
+3 Testing
+
+Für das Testing wurden einige Automatiesierte Curls gemacht, hauptsächlich für die Testung der Interaktion mit der Datenbank, und Unit Tests für die Battle Logic erstellt.
+
+3.1 Curl scripts
+
 1-unverändert
 2-unverändert
 3-Da die Karten vom Server per Zufall erstellt werden und in ein Package geladen werden wurde dieses Curl durch: Logout User ersetzt
 4-unverändert
 5-unerändert
-6- Es müssen keine neuen Packages erstellt werden da diese bei Bedarf erstellt werden
+6- Es müssen keine neuen Packages erstellt werden da diese bei Bedarf zufällig erstellt werden
 7-unverändert
 8-unverändert
 9-unverändert
@@ -26,7 +99,7 @@ Diese Sollten kommentiert sein und hoffentlich auch begründet.
 14-unverändert
 15-unverändert
 16-unverändert
-17..
+17-unverändert
 18-unverändert
 19-unverändert
 20-Hier habe ich mich bewusst für das Alternative Design eines Auktionshauses entschieden. Es wird eine CardID und ein price gesendet. 
@@ -35,11 +108,41 @@ Eine Karte "Goblinbombe“ mit 5 Stärke und extra "du verlierst das Spiel nächste 
 Außerdem entsteht mit dem Auktionshaus die Möglichkeit verschiedene Kurse für Karten zu haben, diese können demnach an wert verlieren oder gewinnen und dieses Prinzip fasziniert mich sehr.
 21-unverändert
 
-Zusätzliche Curls: 
+3.2 Zusätzliche Curls: 
 
 22- show trading deals for specific user: Zeigt alle Karten die von einem bestimmten User angeboten werden.
 23-Delete Trading Deal : entfernt eine Karte aus dem Auktionshaus
 24- Buy a Card: User kauft eine andere Karte für Geld.
+
+3.3 Unit Tests
+
+Tests für den reibungslosen Ablauf der Dmg berechnung der Karten je nachdem welche Karte ihr gegenübbersteht.
+
+4 Time Tracking
+
+Das Time Tracking erfolgte größtenteils simultan mit dem Fortschritt des Projektes. Nicht verfolgte Zeit wurde durch die Git History bestmöglich reproduziert.
+
+-30.10.2020 Projekt gestartet und Kartenklassen erstellt 5H
+-18.11.2020 Projekt neu aufgesetzt und erste versuche mit Json 6,5H
+-19.11.2020 Projekt erneut stark umgeschrieben 8H
+-26.11.2020 Neu umgesetzten änderungen wurden getestet und weiter bearbeitet 4H
+-27.11.2020 Umsetzung einiger Curls 3H
+-29.12.2020 Datenbank connection gestartet 5H
+-30-31.12.2020 Datenbankarbeiten 5H
+-31.12.2020 Große Datenabnkänderungen 6H
+-2.1.2020 Datenbankarbeiten + Curls 4H
+-4.1.2020 Datenbankarbeiten +Curls 5H
+-5.1.2020 Datenbankarbeiten +Curls 5H
+-6.1.2020 Datenbankarbeiten +Curls 5H
+-7.1.2020 Dokumentation + Curls 5H
+-8.1.2020 Battle Logic begonnen 4H
+-9.1.2020 Battle Logic beendet und getestet 5H
+-10.1.2020 Diverse Feinschliffe 8H
+
+Gesammt: 83,5 H
+
+
+
 
 
 

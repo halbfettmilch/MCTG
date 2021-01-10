@@ -4,19 +4,19 @@ using System.Text;
 
 namespace MonsterTradingCardGame1
 {
-    public class OrkBoys : Card
+    public class GiantWave : Card
     {
 
 
-        
-        public OrkBoys()
+
+        public GiantWave()
         {
-            _Name = "OrkBoys";
+            _Name = "Fireball";
             _Description = "...";
-            _Type = 1;
-            _element = "Normal";
-            _Race = "Ork";
-            _attack = 3;
+            _Type = 2;
+            _element = "Water";
+            _Race = "";
+            _attack = 10;
         }
 
         public override int cardBattle(Card enemyCard)
@@ -24,7 +24,7 @@ namespace MonsterTradingCardGame1
 
 
             int combatDMG = this._attack;
-            if (enemyCard._Race == "Wizzard")
+            if (enemyCard._Race == "Kraken")
             {
                 combatDMG = 0;
             }

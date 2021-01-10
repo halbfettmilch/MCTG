@@ -16,12 +16,6 @@ namespace MonsterTradingCardGame1
 
         public string json { get; set; }
 
-        /* public List <SortedDictionary<string, string>> payload { get; set; }
-
-         public RequestContext()
-         {
-             payload= new 
-         }
-        */
+        
     }
 }

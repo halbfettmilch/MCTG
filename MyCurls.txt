@@ -149,14 +149,13 @@ curl -X GET http://localhost:10001/score --header "Content-Type: application/jso
 echo.
 echo.
 
------------------------------------------------------FUNCTIONIERT BIS HIER
 
 echo 17) battle
-start /b "kienboec battle" curl -X POST http://localhost:10001/battles --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
-start /b "altenhof battle" curl -X POST http://localhost:10001/battles --header "Content-Type: application/json" --header "Authorization: Basic altenhof-mtcgToken"
+curl -X POST http://localhost:10001/battles --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"
+curl -X POST http://localhost:10001/battles --header "Content-Type: application/json" --header "Authorization: Basic vollmilch-mtcgToken"
 ping localhost -n 10 >NUL 2>NUL
 
----------------------------------------FUNKTIONIERT AB HIER 
+
 echo 18) Stats 
 echo kienboec
 curl -X GET http://localhost:10001/stats --header "Content-Type: application/json" --header "Authorization: Basic kienboec-mtcgToken"

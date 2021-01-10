@@ -25,6 +25,8 @@ namespace MonsterTradingCardGame1
             single_instance.cardlist.Add(new FireElveShaman());
             single_instance.cardlist.Add(new GreyKnight());
             single_instance.cardlist.Add(new WizzardNovice());
+            single_instance.cardlist.Add(new Fireball());
+            single_instance.cardlist.Add(new GiantWave());
             return single_instance;
         }
         // help functions

@@ -1757,7 +1757,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"userbioio\": \"me playin...\", \"userimage\": \":-)\"}",
+					"raw": "{\"userbio\": \"me playin...\", \"userimage\": \":-)\"}",
 					"options": {
 						"raw": {
 							"language": "json"

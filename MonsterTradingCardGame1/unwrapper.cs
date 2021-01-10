@@ -55,37 +55,6 @@ namespace MonsterTradingCardGame1
                 }
                 debug($"received: " + json);
                 request.json = json;
-               
-
-                /*
-                  SortedDictionary<string, string> bufferdic = JsonConvert.DeserializeObject<SortedDictionary<string, string>>(json);
-                 request.payload.Add(bufferdic);
-                 Console.WriteLine(bufferdic["Username"]);
-                 
-                 // arr = json.Split("|");
-                  //for (int i = 0; i < arr.Length; i++)
-                 // {
-                 //     SortedDictionary<string, string> bufferdic = JsonConvert.DeserializeObject<SortedDictionary<string, string>>(arr[i]);
-                 //     request.payload.Add(bufferdic);
-                 //     Console.WriteLine(bufferdic["Username"]);
-                  //
-                 // }
-  
-  
-                  /*
-                  while (i<arr.Length)
-                  {
-                     
-                      string[] bufferarr;
-                      bufferarr = arr[i].Split(":");
-                      SortedDictionary<string, string> buffermap= new SortedDictionary<string, string>();
-                      buffermap.Add(bufferarr[0], bufferarr[1]);
-                      request.payload.Add(buffermap);
-                      i++;
-                      debug(bufferarr[0]+ " " + bufferarr[1]);
-                  }
-                  */
-
             }
             catch (Exception exc)
             {

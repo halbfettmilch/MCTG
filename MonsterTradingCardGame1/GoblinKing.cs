@@ -21,13 +21,13 @@ namespace MonsterTradingCardGame1
 
         public override int cardBattle(Card enemyCard)
         {
-            int CombatDMG = this._attack;
+            int combatDMG = this._attack;
             if (enemyCard._Race == "Dragon")
             {
-                CombatDMG = 0;
+                combatDMG = 0;
             }
 
-            return CombatDMG;
+            return combatDMG;
             
             
         }

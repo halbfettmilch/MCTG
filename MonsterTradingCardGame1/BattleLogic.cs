@@ -15,8 +15,9 @@ namespace MonsterTradingCardGame1
                 for (int i = 0; i < Gamebuffer.cardlist.Count; i++)
                 {
                     if (Gamebuffer.cardlist[i]._Name == pcards[j])
-                    {   //Console.WriteLine(Gamebuffer.cardlist[i]._Name);
+                    {   Console.WriteLine(Gamebuffer.cardlist[i]._Name);
                         playerdeck.Add(Gamebuffer.cardlist[i]);
+                        break;
                     }
                 }
             }
@@ -50,7 +51,6 @@ namespace MonsterTradingCardGame1
                 {
                     battleLog += "The " + i + "st round was a Tie\n -------------------------\n";
                 }
-
                 if (player2deck.Count == 0)
                 {
                     battleLog +="|||"+user1+" won|||";

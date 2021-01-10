@@ -8,9 +8,11 @@ using Npgsql;
 using Npgsql.PostgresTypes;
 
 namespace MonsterTradingCardGame1
-{
+{   
     public class DatabaseService
     {
+        static private bool working = false;
+        static private string winner = null;
         public static void TestConnection()
         {
             using (NpgsqlConnection con = GetConnection())
@@ -776,7 +778,7 @@ namespace MonsterTradingCardGame1
         public static string SearchForBattle(string username)
         {
             using (NpgsqlConnection con = GetConnection())
-            {
+            {   
                 string query3 = "SELECT cardname FROM cards WHERE cardstatus = 1 AND cardowner='" + username + "'";
                 NpgsqlCommand cmd3 = new NpgsqlCommand(query3, con);
                 con.Open();
@@ -792,7 +794,7 @@ namespace MonsterTradingCardGame1
                 if (cardsP1.Length != 4)
                 {
                     con.Close();
-                    return "You has no valid Deck";
+                    return "You have no valid Deck";
                 }
                 con.Close();
                 string query = "SELECT username FROM users WHERE userstatus = 2";
@@ -818,12 +820,19 @@ namespace MonsterTradingCardGame1
                     NpgsqlCommand cmd1 = new NpgsqlCommand(query1, con);
                     int n = cmd1.ExecuteNonQuery();
                     if (n == 1)
-                    {
+                    {   
+                        working = true;
+                        winner = null;
                         con.Close();
-                        return "Waiting for Battle";
+                        while (working)
+                        {
+                            
+                        }
+                        return winner;
                     }
 
                 }
+                con.Close();
                 string query2 = "SELECT cardname FROM cards WHERE cardstatus = 1 AND cardowner='"+newusername+"'";
                 NpgsqlCommand cmd2 = new NpgsqlCommand(query2, con);
                 con.Open();
@@ -834,8 +843,6 @@ namespace MonsterTradingCardGame1
                 {
                     cardsP2[i] = reader2.GetString(0);
                     i++;
-                    
-
                 }
                 if (cardsP2.Length!=4)
                 {
@@ -845,7 +852,8 @@ namespace MonsterTradingCardGame1
                 con.Close();
                 //start Battle
                 BattleLogic battlebuffer= new BattleLogic();
-                string winner = battlebuffer.battle(username,newusername,cardsP1,cardsP2);
+                winner = battlebuffer.battle(username,newusername,cardsP1,cardsP2);
+                working = false;
                 var lastLine = winner.Split('\n').Last();
                 if (lastLine == "|||" + username + " won|||")
                 {
